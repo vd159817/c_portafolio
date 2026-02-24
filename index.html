@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bella Invitaciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8d5a3;
+    --gold-pale: #f7f0de;
+    --rose: #d4a0a0;
+    --cream: #fdf8f2;
+    --dark: #2d2318;
+    --text: #4a3728;
+    --text-light: #7a6555;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    color: var(--text);
+    background: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND ── */
+  .bg-layer {
+    position: fixed; inset: 0; z-index: -2;
+    background: url('fondo.png') center/cover no-repeat;
+  }
+  .bg-overlay {
+    position: fixed; inset: 0; z-index: -1;
+    background: rgba(253, 248, 242, 0.88);
+  }
+
+  /* ── DESTELLOS ── */
+  .sparkle-container { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .sparkle {
+    position: absolute;
+    top: -20px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff8cc, #c9a84c80);
+    animation: fall linear infinite;
+    opacity: 0;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-20px) scale(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(110vh) scale(0.3); opacity: 0; }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 6vw;
+    background: rgba(253, 248, 242, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--gold-light);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 12px; text-decoration: none;
+  }
+  .logo-icon {
+    width: 40px; height: 40px;
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+  .logo-icon svg { width: 36px; height: 36px; }
+  .logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 400; font-style: italic;
+    color: var(--gold); letter-spacing: 0.04em; line-height: 1;
+  }
+  .logo-text span { display: block; font-size: 0.65rem; font-style: normal; font-weight: 300; letter-spacing: 0.18em; color: var(--text-light); text-transform: uppercase; }
+  /* card image covers */
+  .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* card link buttons row */
+  .card-links { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .card-link-preview {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--gold); color: #fff;
+    padding: 7px 14px; border-radius: 2px; text-decoration: none;
+    transition: background .3s, transform .2s;
+  }
+  .card-link-preview:hover { background: var(--dark); transform: translateY(-1px); }
+  /* contact flow */
+  .contact-flow { display: flex; flex-direction: column; gap: 20px; align-items: center; width: 100%; }
+  .contact-step-label {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px; text-align: center;
+  }
+  .contact-reminder {
+    background: rgba(201,168,76,0.08); border: 1px solid var(--gold-light);
+    border-radius: 4px; padding: 14px 20px; text-align: center;
+    font-size: 0.83rem; color: var(--text-light); line-height: 1.7; font-weight: 300;
+    max-width: 420px;
+  }
+  .contact-reminder strong { color: var(--gold); }
+  .btn-form-cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--dark); color: #fff;
+    padding: 16px 36px; border-radius: 2px;
+    text-decoration: none; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase;
+    transition: background .3s, transform .2s, box-shadow .3s;
+    box-shadow: 0 4px 18px rgba(45,35,24,0.2);
+  }
+  .btn-form-cta:hover { background: var(--gold); transform: translateY(-2px); }
+
+  nav ul { list-style: none; display: flex; gap: 32px; }
+  nav a { text-decoration: none; font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-light); transition: color .3s; }
+  nav a:hover { color: var(--gold); }
+
+  .nav-cta {
+    background: var(--gold); color: #fff !important;
+    padding: 8px 18px; border-radius: 2px;
+    transition: background .3s, transform .2s !important;
+  }
+  .nav-cta:hover { background: var(--dark) !important; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 90vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 80px 6vw 60px;
+    position: relative;
+  }
+  .hero-ornament { color: var(--gold-light); font-size: 1.4rem; letter-spacing: 0.5em; margin-bottom: 20px; opacity: 0.8; }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 300; font-style: italic;
+    color: var(--dark); line-height: 1.15;
+    margin-bottom: 24px;
+  }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p {
+    max-width: 560px; font-size: 1rem; line-height: 1.85;
+    color: var(--text-light); margin-bottom: 40px; font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .btn-primary {
+    background: var(--gold); color: #fff;
+    padding: 14px 36px; border-radius: 2px;
+    text-decoration: none; font-size: 0.82rem; letter-spacing: 0.14em; text-transform: uppercase;
+    transition: background .3s, transform .2s, box-shadow .3s;
+    box-shadow: 0 4px 18px rgba(201,168,76,0.25);
+  }
+  .btn-primary:hover { background: var(--dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .btn-ghost {
+    border: 1px solid var(--gold); color: var(--gold);
+    padding: 13px 36px; border-radius: 2px;
+    text-decoration: none; font-size: 0.82rem; letter-spacing: 0.14em; text-transform: uppercase;
+    transition: all .3s;
+  }
+  .btn-ghost:hover { background: var(--gold); color: #fff; transform: translateY(-2px); }
+
+  /* decorative line */
+  .divider {
+    display: flex; align-items: center; gap: 18px;
+    margin: 60px auto; max-width: 200px;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--gold-light);
+  }
+  .divider-diamond {
+    width: 8px; height: 8px;
+    background: var(--gold); transform: rotate(45deg);
+  }
+
+  /* ── SECCIÓN PORTAFOLIO ── */
+  section { padding: 80px 6vw; position: relative; }
+  .section-label {
+    font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); text-align: center; margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.9rem, 4vw, 2.8rem); font-weight: 300; font-style: italic;
+    text-align: center; color: var(--dark); margin-bottom: 14px;
+  }
+  .section-sub { text-align: center; color: var(--text-light); font-size: 0.95rem; font-weight: 300; margin-bottom: 56px; }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px; max-width: 1100px; margin: 0 auto;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--gold-light);
+    border-radius: 4px; overflow: hidden;
+    transition: transform .35s, box-shadow .35s;
+    cursor: pointer;
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(201,168,76,0.18); }
+
+  .card-img {
+    height: 200px; width: 100%; overflow: hidden;
+    position: relative; background: var(--gold-pale);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card-img .placeholder {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .card-img .placeholder svg { opacity: 0.4; }
+  .card-img .placeholder span {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 0.95rem; color: var(--gold); opacity: 0.7;
+  }
+  /* unique color per card */
+  .card:nth-child(1) .card-img { background: linear-gradient(135deg, #f7ede8, #f0ddd5); }
+  .card:nth-child(2) .card-img { background: linear-gradient(135deg, #edf0f7, #d5ddf0); }
+  .card:nth-child(3) .card-img { background: linear-gradient(135deg, #edf7ed, #d5f0d5); }
+  .card:nth-child(4) .card-img { background: linear-gradient(135deg, #f7f3ed, #f0e9d5); }
+
+  .card-body { padding: 24px 24px 28px; }
+  .card-tag {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-style: italic; font-weight: 400;
+    color: var(--dark); margin-bottom: 10px;
+  }
+  .card-desc { font-size: 0.88rem; color: var(--text-light); line-height: 1.75; font-weight: 300; margin-bottom: 20px; }
+  .card-link {
+    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid var(--gold-light); padding-bottom: 2px;
+    transition: color .3s, border-color .3s;
+  }
+  .card-link:hover { color: var(--dark); border-color: var(--dark); }
+
+  /* ── PROCESO ── */
+  #proceso { background: rgba(247, 240, 222, 0.55); }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px; max-width: 900px; margin: 0 auto 48px;
+    text-align: center;
+  }
+  .step {
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    padding: 32px 20px;
+    background: rgba(255,255,255,0.7); border: 1px solid var(--gold-light);
+    border-radius: 4px; transition: transform .3s;
+  }
+  .step:hover { transform: translateY(-4px); }
+  .step-icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--gold-pale); border: 1px solid var(--gold-light);
+    display: flex; align-items: center; justify-content: center;
+    transition: background .3s;
+  }
+  .step:hover .step-icon { background: var(--gold); }
+  .step:hover .step-icon svg path,
+  .step:hover .step-icon svg rect,
+  .step:hover .step-icon svg circle,
+  .step:hover .step-icon svg polyline,
+  .step:hover .step-icon svg line { stroke: #fff; }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif; font-size: 0.75rem;
+    letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase;
+  }
+  .step-name {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-style: italic;
+    color: var(--dark);
+  }
+  .step-desc { font-size: 0.83rem; color: var(--text-light); font-weight: 300; line-height: 1.6; }
+
+  .delivery-note {
+    text-align: center; font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-style: italic; color: var(--gold);
+    margin-bottom: 48px;
+  }
+
+  /* precios */
+  .prices-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px; max-width: 600px; margin: 0 auto;
+  }
+  .price-card {
+    background: rgba(255,255,255,0.8); border: 1px solid var(--gold-light);
+    border-radius: 4px; padding: 32px 28px; text-align: center;
+    transition: transform .3s, box-shadow .3s;
+  }
+  .price-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(201,168,76,0.15); }
+  .price-card.featured { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+  .price-type {
+    font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 10px;
+  }
+  .price-amount {
+    font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 300;
+    color: var(--dark); line-height: 1;
+  }
+  .price-amount sup { font-size: 1.2rem; vertical-align: super; }
+  .price-detail { font-size: 0.83rem; color: var(--text-light); margin-top: 12px; line-height: 1.65; font-weight: 300; }
+
+  /* ── CONTACTO ── */
+  #contacto { text-align: center; }
+  .contact-card {
+    max-width: 540px; margin: 0 auto;
+    background: rgba(255,255,255,0.75); border: 1px solid var(--gold-light);
+    border-radius: 4px; padding: 56px 40px;
+  }
+  .whatsapp-btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: #25D366; color: #fff;
+    padding: 16px 36px; border-radius: 2px;
+    text-decoration: none; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;
+    transition: background .3s, transform .2s, box-shadow .3s;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+    margin-top: 28px;
+  }
+  .whatsapp-btn:hover { background: #1da855; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.35); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--gold-light);
+    padding: 32px 6vw; text-align: center;
+    font-size: 0.78rem; letter-spacing: 0.1em; color: var(--text-light);
+  }
+  footer .footer-logo {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 1.1rem; color: var(--gold); margin-bottom: 8px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    nav ul { display: none; }
+    .hero { min-height: 80vh; padding-top: 60px; }
+    .contact-card { padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-layer"></div>
+<div class="bg-overlay"></div>
+
+<!-- Sparkles -->
+<div class="sparkle-container" id="sparkles"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="8" width="30" height="20" rx="2" stroke="#c9a84c" stroke-width="1.5"/>
+        <path d="M3 10 L18 21 L33 10" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+        <path d="M18 4 L18 8 M14 5.5 L16 8 M22 5.5 L20 8" stroke="#e8d5a3" stroke-width="1" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      Bella Invitaciones
+      <span>Invitaciones Digitales</span>
+    </div>
+  </a>
+  <ul>
+    <li><a href="#portafolio">Portafolio</a></li>
+    <li><a href="#proceso">Proceso</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+    <li><a href="https://forms.gle/5WPtxy6Yzu1N7ZnW7" target="_blank" class="nav-cta">Ordenar</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-ornament">✦ &nbsp;&nbsp; ✦ &nbsp;&nbsp; ✦</div>
+  <h1>Que cada detalle<br><em>cuente tu historia</em></h1>
+  <p>Haz que tu día especial sea inolvidable con nuestras invitaciones elegantes y personalizadas. Entrega rápida y proceso simple para que solo disfrutes del momento.</p>
+  <div class="hero-btns">
+    <a href="#portafolio" class="btn-primary">Ver Portafolio</a>
+    <a href="https://forms.gle/5WPtxy6Yzu1N7ZnW7" target="_blank" class="btn-ghost">Datos &amp; Pedido</a>
+  </div>
+</section>
+
+<!-- PORTAFOLIO -->
+<section id="portafolio">
+  <p class="section-label">✦ Colección</p>
+  <h2 class="section-title">Nuestras Invitaciones</h2>
+  <p class="section-sub">Cada diseño creado con amor, para momentos que se recuerdan siempre.</p>
+
+  <div class="portfolio-grid">
+    <!-- Bodas -->
+    <div class="card">
+      <div class="card-img">
+        <img src="a.jpg" alt="Invitación de Boda">
+      </div>
+      <div class="card-body">
+        <p class="card-tag">✦ BODAS</p>
+        <h3 class="card-title">Amor Eterno</h3>
+        <p class="card-desc">Invitaciones digitales elegantes y completamente personalizadas. Comparte con tus invitados con un solo link, sin complicaciones.</p>
+        <div class="card-links">
+          <a href="https://boda-patricia-y-adam.netlify.app/" target="_blank" class="card-link-preview">Ver invitación →</a>
+          <a href="https://forms.gle/5WPtxy6Yzu1N7ZnW7" target="_blank" class="card-link">Ordenar este diseño →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- XV Años -->
+    <div class="card">
+      <div class="card-img">
+        <img src="b.jpg" alt="Invitación XV Años">
+      </div>
+      <div class="card-body">
+        <p class="card-tag">✦ XV Años</p>
+        <h3 class="card-title">Quinceañera</h3>
+        <p class="card-desc">Invitaciones digitales llenas de brillo y feminidad. Personaliza colores, flores y el mensaje especial para la protagonista del festejo.</p>
+        <div class="card-links">
+          <a href="https://mis-xv-valentina-871.netlify.app/" target="_blank" class="card-link-preview">Ver invitación →</a>
+          <a href="https://forms.gle/5WPtxy6Yzu1N7ZnW7" target="_blank" class="card-link">Ordenar este diseño →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bautizos -->
+    <div class="card">
+      <div class="card-img">
+        <img src="c.jpg" alt="Invitación de Bautizo">
+      </div>
+      <div class="card-body">
+        <p class="card-tag">✦ Bautizos</p>
+        <h3 class="card-title">Primer Milagro</h3>
+        <p class="card-desc">Delicadas invitaciones digitales con motivos angelicales o florales. Compártelas al instante con toda tu familia y amigos.</p>
+        <div class="card-links">
+          <a href="https://vd159817.github.io/bautizo_emilio/" target="_blank" class="card-link-preview">Ver invitación →</a>
+          <a href="https://forms.gle/5WPtxy6Yzu1N7ZnW7" target="_blank" class="card-link">Ordenar este diseño →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cumpleaños Infantil -->
+    <div class="card">
+      <div class="card-img">
+        <img src="d.jpg" alt="Cumpleaños Infantil">
+      </div>
+      <div class="card-body">
+        <p class="card-tag">✦ Cumpleaños</p>
+        <h3 class="card-title">Fiesta Mágica</h3>
+        <p class="card-desc">Invitaciones digitales coloridas y llenas de alegría. Elige la temática favorita del festejado y sorprende a todos los invitados.</p>
+        <div class="card-links">
+          <a href="https://vd159817.github.io/c_frozen/" target="_blank" class="card-link-preview">Ver invitación →</a>
+          <a href="https://forms.gle/5WPtxy6Yzu1N7ZnW7" target="_blank" class="card-link">Ordenar este diseño →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso">
+  <p class="section-label">✦ Cómo Funciona</p>
+  <h2 class="section-title">Proceso de Compra</h2>
+  <p class="section-sub">Solo tres pasos sencillos y tu invitación estará lista.</p>
+
+  <div class="steps-grid">
+    <!-- Paso 1 -->
+    <div class="step">
+      <div class="step-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="3" y="6" width="22" height="16" rx="2" stroke="#c9a84c" stroke-width="1.5"/>
+          <path d="M3 11 H25" stroke="#c9a84c" stroke-width="1.5"/>
+          <rect x="7" y="15" width="5" height="3" rx="1" stroke="#c9a84c" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <p class="step-num">Paso 01</p>
+      <p class="step-name">Realiza tu Pago</p>
+      <p class="step-desc">Transfiere el pago completo o anticipo según tu tipo de invitación.</p>
+    </div>
+
+    <!-- Paso 2 -->
+    <div class="step">
+      <div class="step-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="4" y="3" width="20" height="22" rx="2" stroke="#c9a84c" stroke-width="1.5"/>
+          <line x1="8" y1="10" x2="20" y2="10" stroke="#c9a84c" stroke-width="1.2"/>
+          <line x1="8" y1="14" x2="20" y2="14" stroke="#c9a84c" stroke-width="1.2"/>
+          <line x1="8" y1="18" x2="14" y2="18" stroke="#c9a84c" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <p class="step-num">Paso 02</p>
+      <p class="step-name">Envía tus Datos</p>
+      <p class="step-desc">Llena el formulario con nombres, fecha, hora y detalles del evento.</p>
+    </div>
+
+    <!-- Paso 3 -->
+    <div class="step">
+      <div class="step-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <path d="M5 4 C3 4 2 5 2 7 L2 19 C2 21 3 22 5 22 L10 22 L14 26 L18 22 L23 22 C25 22 26 21 26 19 L26 7 C26 5 25 4 23 4 Z" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+          <circle cx="9" cy="13" r="1.5" stroke="#c9a84c" stroke-width="1"/>
+          <circle cx="14" cy="13" r="1.5" stroke="#c9a84c" stroke-width="1"/>
+          <circle cx="19" cy="13" r="1.5" stroke="#c9a84c" stroke-width="1"/>
+        </svg>
+      </div>
+      <p class="step-num">Paso 03</p>
+      <p class="step-name">WhatsApp</p>
+      <p class="step-desc">Envíanos la captura de tu pago por WhatsApp y cualquier duda que tengas.</p>
+    </div>
+  </div>
+
+  <p class="delivery-note">✦ Entregamos tu diseño en 1–2 días hábiles ✦</p>
+
+  <p class="section-label" style="margin-bottom:24px;">Precios</p>
+  <div class="prices-grid">
+    <div class="price-card featured">
+      <p class="price-type">Bodas &amp; XV Años</p>
+      <div class="price-amount"><sup>$</sup>300</div>
+      <p class="price-detail">Opción de anticipo:<br><strong>$150</strong> al ordenar + <strong>$150</strong> al entregar.</p>
+    </div>
+    <div class="price-card">
+      <p class="price-type">Bautizos &amp; Cumpleaños</p>
+      <div class="price-amount"><sup>$</sup>150</div>
+      <p class="price-detail">Pago completo antes de iniciar el diseño.</p>
+    </div>
+  </div>
+
+  <!-- Datos bancarios -->
+  <div style="max-width:600px;margin:28px auto 0;">
+    <div class="price-card" style="text-align:left;padding:32px 32px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--gold-pale);border:1px solid var(--gold-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <rect x="1" y="7" width="20" height="13" rx="2" stroke="#c9a84c" stroke-width="1.4"/>
+            <path d="M1 11 H21" stroke="#c9a84c" stroke-width="1.4"/>
+            <path d="M4 4 L11 1 L18 4" stroke="#c9a84c" stroke-width="1.4" stroke-linejoin="round"/>
+            <rect x="4" y="14" width="4" height="3" rx="0.5" fill="#c9a84c" opacity="0.5"/>
+          </svg>
+        </div>
+        <div>
+          <p class="price-type" style="margin-bottom:2px;">Datos para Transferencia</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--dark);">Nu México · SPEI</p>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="background:var(--gold-pale);border-radius:3px;padding:12px 16px;">
+          <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Beneficiario</p>
+          <p style="font-size:0.95rem;color:var(--dark);font-weight:400;">Dellaneira Alvarado Hidalgo</p>
+        </div>
+        <div style="background:var(--gold-pale);border-radius:3px;padding:12px 16px;">
+          <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">CLABE Interbancaria</p>
+          <p style="font-size:1rem;color:var(--dark);font-weight:400;letter-spacing:0.06em;font-family:'Lato',sans-serif;">638180000182526477</p>
+        </div>
+        <div style="background:rgba(201,168,76,0.06);border:1px dashed var(--gold-light);border-radius:3px;padding:12px 16px;">
+          <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">💳 Depósito en tiendas sin tarjeta</p>
+          <p style="font-size:0.78rem;color:var(--text-light);font-weight:300;margin-bottom:6px;">OXXO · Soriana · Kiosko · Chedraui · Farmacias del Ahorro · Waldo's</p>
+          <p style="font-size:1rem;color:var(--dark);font-weight:400;letter-spacing:0.06em;font-family:'Lato',sans-serif;">5101 2526 6833 9469</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <p class="section-label">✦ Hablemos</p>
+  <h2 class="section-title">¿Lista para empezar?</h2>
+  <p class="section-sub">Contáctanos para comenzar a diseñar la invitación perfecta para ti.</p>
+
+  <div class="contact-card">
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" style="margin-bottom:18px">
+      <rect x="4" y="12" width="48" height="32" rx="3" stroke="#c9a84c" stroke-width="1.5"/>
+      <path d="M4 16 L28 32 L52 16" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+    </svg>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.5rem;color:var(--dark);margin-bottom:10px;">Diseñemos juntas tu momento</h3>
+    <p style="color:var(--text-light);font-size:0.9rem;font-weight:300;line-height:1.8;margin-bottom:24px;">
+      Sigue estos dos pasos para comenzar tu invitación digital. Es rápido y sencillo.
+    </p>
+
+    <div class="contact-flow">
+      <!-- Paso 1: Formulario -->
+      <div style="width:100%;max-width:420px;">
+        <p class="contact-step-label">① Primero — Envía tus datos</p>
+        <a href="https://forms.gle/5WPtxy6Yzu1N7ZnW7" target="_blank" class="btn-form-cta" style="width:100%;justify-content:center;">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="2" y="2" width="16" height="16" rx="2" stroke="white" stroke-width="1.5"/>
+            <line x1="5" y1="7" x2="15" y2="7" stroke="white" stroke-width="1.2"/>
+            <line x1="5" y1="10" x2="15" y2="10" stroke="white" stroke-width="1.2"/>
+            <line x1="5" y1="13" x2="10" y2="13" stroke="white" stroke-width="1.2"/>
+          </svg>
+          Haz clic aquí para enviar tus datos
+        </a>
+      </div>
+
+      <!-- Recordatorio -->
+      <div class="contact-reminder">
+        <strong>📋 Importante:</strong> Por favor llena primero el formulario de datos antes de enviarnos mensaje por WhatsApp. Esto nos ayuda a preparar tu invitación más rápido.
+      </div>
+
+      <!-- Paso 2: WhatsApp -->
+      <div style="width:100%;max-width:420px;">
+        <p class="contact-step-label">② Después — Confirma por WhatsApp</p>
+        <a href="https://wa.me/6183012070?text=Hola%2C%20me%20interesan%20las%20invitaciones%20de%3A%20_____________" target="_blank" class="whatsapp-btn" style="width:100%;justify-content:center;">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="white">
+            <path d="M11 1C5.477 1 1 5.477 1 11c0 1.89.525 3.66 1.438 5.168L1 21l5.007-1.414A9.957 9.957 0 0011 21c5.523 0 10-4.477 10-10S16.523 1 11 1zm0 1.5a8.5 8.5 0 110 17 8.5 8.5 0 010-17zm-2.43 4.3c-.18-.004-.37.004-.545.093-.185.093-.48.372-.74.65-.255.278-.51.687-.51 1.147 0 .46.246.918.374 1.1.127.18 1.246 2.024 3.08 2.788 1.532.637 1.835.51 2.167.478.33-.032 1.065-.436 1.215-.857.15-.42.15-.78.105-.857-.045-.076-.165-.12-.345-.21-.18-.09-1.065-.525-1.23-.585-.165-.06-.285-.09-.405.09-.12.18-.464.585-.57.705-.105.12-.21.135-.39.045-.18-.09-.76-.28-1.447-.892-.535-.477-.897-1.065-1.003-1.245-.105-.18-.012-.277.08-.367.08-.08.18-.21.27-.315.09-.105.12-.18.18-.3.06-.12.03-.225-.015-.315-.045-.09-.405-.975-.555-1.335-.147-.35-.297-.302-.405-.307z"/>
+          </svg>
+          Enviar WhatsApp con captura de pago
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-logo">Bella Invitaciones</p>
+  <p>Bella Invitaciones © 2026 · Diseño con amor para tus momentos especiales</p>
+</footer>
+
+<script>
+  // ── Sparkles generator ──
+  const container = document.getElementById('sparkles');
+  const count = 18;
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    const size = 3 + Math.random() * 6;
+    s.style.cssText = `
+      left: ${Math.random() * 100}%;
+      width: ${size}px;
+      height: ${size}px;
+      animation-duration: ${6 + Math.random() * 10}s;
+      animation-delay: ${Math.random() * 12}s;
+    `;
+    container.appendChild(s);
+  }
+</script>
+</body>
+</html>
