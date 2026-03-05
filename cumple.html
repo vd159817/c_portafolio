@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cumpleaños · Bella Invitaciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8d5a3;
+    --gold-pale: #f7f0de;
+    --rose: #d4a0a0;
+    --cream: #fdf8f2;
+    --dark: #2d2318;
+    --text: #4a3728;
+    --text-light: #7a6555;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Lato', sans-serif;
+    color: var(--text);
+    background: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND ── */
+  .bg-layer {
+    position: fixed; inset: 0; z-index: -2;
+    background: url('fondo.png') center/cover no-repeat;
+  }
+  .bg-overlay {
+    position: fixed; inset: 0; z-index: -1;
+    background: rgba(253, 248, 242, 0.88);
+  }
+
+  /* ── SPARKLES ── */
+  .sparkle-container { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .sparkle {
+    position: absolute; top: -20px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff8cc, #c9a84c80);
+    animation: fall linear infinite; opacity: 0;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-20px) scale(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(110vh) scale(0.3); opacity: 0; }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 5vw;
+    background: rgba(253, 248, 242, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--gold-light);
+  }
+  .logo {
+    display: flex; align-items: center; text-decoration: none;
+  }
+  .logo-icon {
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-icon svg { width: 32px; height: 32px; }
+
+  nav ul { list-style: none; display: flex; gap: 28px; align-items: center; }
+  nav a {
+    text-decoration: none; font-size: 0.8rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-light); transition: color .3s;
+  }
+  nav a:hover { color: var(--gold); }
+
+  .nav-cta {
+    background: var(--gold); color: #fff !important;
+    padding: 8px 18px; border-radius: 2px;
+    transition: background .3s, transform .2s !important;
+  }
+  .nav-cta:hover { background: var(--dark) !important; transform: translateY(-1px); }
+
+  /* ── HAMBURGER ── */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 22px; height: 1.5px;
+    background: var(--gold); transition: all .3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: flex; flex-direction: column; align-items: center; gap: 0;
+    background: rgba(253, 248, 242, 0.97);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--gold-light);
+    padding: 0;
+    position: sticky; top: 57px; z-index: 99;
+    max-height: 0; overflow: hidden;
+    transition: max-height .35s ease, padding .35s;
+  }
+  .mobile-menu.open {
+    max-height: 320px;
+    padding: 12px 0 20px;
+  }
+  @media (min-width: 641px) { .mobile-menu { display: none !important; } }
+  .mobile-menu a {
+    display: block; width: 100%; text-align: center;
+    padding: 12px 24px;
+    font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-light); text-decoration: none;
+    transition: color .3s, background .3s;
+  }
+  .mobile-menu a:hover { color: var(--gold); background: rgba(201,168,76,0.06); }
+  .mobile-menu .nav-cta {
+    margin: 8px 24px 0;
+    border-radius: 2px;
+    color: #fff !important;
+    background: var(--gold);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 72vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 80px 6vw 60px;
+    position: relative;
+  }
+  .hero-ornament { color: var(--gold-light); font-size: 1.4rem; letter-spacing: 0.5em; margin-bottom: 20px; opacity: 0.8; }
+  .hero-badge {
+    display: inline-block;
+    font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid var(--gold-light);
+    padding: 6px 20px; border-radius: 20px;
+    background: rgba(201,168,76,0.07);
+    margin-bottom: 22px;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 300; font-style: italic;
+    color: var(--dark); line-height: 1.18; margin-bottom: 22px;
+  }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p {
+    max-width: 520px; font-size: 0.97rem; line-height: 1.85;
+    color: var(--text-light); margin-bottom: 38px; font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .btn-primary {
+    background: var(--gold); color: #fff;
+    padding: 14px 36px; border-radius: 2px;
+    text-decoration: none; font-size: 0.82rem; letter-spacing: 0.14em; text-transform: uppercase;
+    transition: background .3s, transform .2s, box-shadow .3s;
+    box-shadow: 0 4px 18px rgba(201,168,76,0.25);
+  }
+  .btn-primary:hover { background: var(--dark); transform: translateY(-2px); }
+  .btn-ghost {
+    border: 1px solid var(--gold); color: var(--gold);
+    padding: 13px 36px; border-radius: 2px;
+    text-decoration: none; font-size: 0.82rem; letter-spacing: 0.14em; text-transform: uppercase;
+    transition: all .3s;
+  }
+  .btn-ghost:hover { background: var(--gold); color: #fff; transform: translateY(-2px); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex; align-items: center; gap: 18px;
+    margin: 60px auto; max-width: 200px;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--gold-light);
+  }
+  .divider-diamond {
+    width: 8px; height: 8px;
+    background: var(--gold); transform: rotate(45deg);
+  }
+
+  /* ── SECTION ── */
+  section { padding: 80px 6vw; position: relative; }
+  .section-label {
+    font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); text-align: center; margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.9rem, 4vw, 2.8rem); font-weight: 300; font-style: italic;
+    text-align: center; color: var(--dark); margin-bottom: 14px;
+  }
+  .section-sub {
+    text-align: center; color: var(--text-light); font-size: 0.95rem;
+    font-weight: 300; margin-bottom: 56px;
+  }
+
+  /* ── CARDS GRID ── */
+  .portfolio-grid {
+    display: flex; flex-direction: column;
+    gap: 16px; max-width: 680px; margin: 0 auto;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--gold-light);
+    border-radius: 4px; overflow: hidden;
+    display: flex; flex-direction: row;
+    transition: box-shadow .3s, border-color .3s;
+  }
+  .card:hover { box-shadow: 0 8px 32px rgba(201,168,76,0.16); border-color: var(--gold); }
+
+  .card-img {
+    width: 110px; min-width: 110px; height: 110px;
+    overflow: hidden; flex-shrink: 0;
+    background: linear-gradient(135deg, #d8ecf5, #9ecfe8);
+  }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .card-body {
+    padding: 16px 20px;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 6px; flex: 1;
+  }
+  .card-tag {
+    font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold);
+  }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem; font-style: italic; font-weight: 400;
+    color: var(--dark); line-height: 1.2;
+  }
+  .card-links { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 2px; }
+  .card-link-preview {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--gold); color: #fff;
+    padding: 5px 12px; border-radius: 2px; text-decoration: none;
+    transition: background .3s;
+    white-space: nowrap;
+  }
+  .card-link-preview:hover { background: var(--dark); }
+  .card-link {
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid var(--gold-light); padding-bottom: 1px;
+    transition: color .3s, border-color .3s;
+    white-space: nowrap;
+  }
+  .card-link:hover { color: var(--dark); border-color: var(--dark); }
+
+  @media (max-width: 480px) {
+    .card-img { width: 90px; min-width: 90px; height: 90px; }
+    .card-body { padding: 12px 14px; }
+    .card-title { font-size: 1rem; }
+  }
+
+  /* ── CTA BANNER ── */
+  .cta-banner {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid var(--gold-light);
+    border-radius: 4px;
+    max-width: 640px; margin: 0 auto;
+    padding: 48px 40px; text-align: center;
+  }
+  .cta-sparkle { font-size: 2rem; margin-bottom: 12px; }
+  .cta-banner h3 {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 1.7rem; color: var(--dark); margin-bottom: 12px;
+  }
+  .cta-banner p {
+    color: var(--text-light); font-size: 0.92rem; font-weight: 300;
+    line-height: 1.8; margin-bottom: 28px;
+  }
+
+  /* ── COMING SOON ── */
+  .coming-soon-note {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 1.05rem; color: var(--text-light);
+    margin-top: 36px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .coming-soon-note::before,
+  .coming-soon-note::after {
+    content: ''; display: inline-block;
+    width: 40px; height: 1px; background: var(--gold-light);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--gold-light);
+    padding: 32px 6vw; text-align: center;
+    font-size: 0.78rem; letter-spacing: 0.1em; color: var(--text-light);
+  }
+  footer .footer-logo {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 1.1rem; color: var(--gold); margin-bottom: 8px;
+  }
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb {
+    padding: 14px 6vw 0;
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-light);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .breadcrumb a { color: var(--gold); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb span { opacity: 0.5; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    nav ul { display: none; }
+    .hamburger { display: flex; }
+    .hero { min-height: 65vh; padding-top: 50px; }
+    .cta-banner { padding: 36px 24px; }
+    .portfolio-grid.single { grid-template-columns: 1fr; }
+    .card-body { padding: 20px 20px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="bg-overlay"></div>
+<div class="sparkle-container" id="sparkles"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo" aria-label="Bella Invitaciones — Inicio">
+    <div class="logo-icon">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="8" width="30" height="20" rx="2" stroke="#c9a84c" stroke-width="1.5"/>
+        <path d="M3 10 L18 21 L33 10" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+        <path d="M18 4 L18 8 M14 5.5 L16 8 M22 5.5 L20 8" stroke="#e8d5a3" stroke-width="1" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </a>
+
+  <!-- Desktop nav -->
+  <ul>
+    <li><a href="index.html#portafolio">Portafolio</a></li>
+    <li><a href="index.html#proceso">Proceso</a></li>
+    <li><a href="index.html#contacto">Contacto</a></li>
+    <li><a href="https://forms.gle/5WPtxy6Yzu1N7ZnW7" target="_blank" class="nav-cta">Ordenar</a></li>
+  </ul>
+
+  <!-- Mobile hamburger -->
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html#portafolio">Portafolio</a>
+  <a href="index.html#proceso">Proceso</a>
+  <a href="index.html#contacto">Contacto</a>
+  <a href="https://forms.gle/5WPtxy6Yzu1N7ZnW7" target="_blank" class="nav-cta">Ordenar</a>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Inicio</a>
+  <span>›</span>
+  <span>Cumpleaños</span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-ornament">✦ &nbsp;&nbsp; ✦ &nbsp;&nbsp; ✦</div>
+  <div class="hero-badge">Invitaciones de Cumpleaños</div>
+  <h1>Que la fiesta empiece<br><em>con magia y alegría</em></h1>
+  <p>Invitaciones digitales temáticas para el cumpleaños más especial. Elige el diseño perfecto, personalízalo con los datos del festejado y compártelo con todos en segundos.</p>
+  <div class="hero-btns">
+    <a href="#disenos" class="btn-primary">Ver Diseños</a>
+    <a href="index.html#proceso" class="btn-ghost">Proceso de Compra</a>
+  </div>
+</section>
+
+<!-- DISEÑOS -->
+<section id="disenos">
+  <p class="section-label">✦ Ejemplos · Cumpleaños</p>
+  <h2 class="section-title">Algunos de nuestros diseños</h2>
+  <p class="section-sub">Podemos recrear cualquier temática que tengas en mente — estas son algunas muestras de lo que hacemos.</p>
+
+  <div class="portfolio-grid">
+
+    <!-- Tarjeta Frozen -->
+    <div class="card">
+      <div class="card-img">
+        <img src="cumple_imagenes/a.jpg">
+      </div>
+      <div class="card-body">
+        <p class="card-tag">✦ Cumpleaños Infantil</p>
+        <h3 class="card-title">Frozen — El Reino del Hielo</h3>
+        <div class="card-links">
+          <a href="https://vd159817.github.io/c_frozen/" target="_blank" class="card-link-preview">Ver invitación →</a>
+          <a href="index.html#proceso" class="card-link">Pedir este diseño →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="coming-soon-note">Próximamente más diseños disponibles</p>
+</section>
+
+<!-- CTA SECTION -->
+<section id="pedir" style="padding-top: 0;">
+  <div class="cta-banner">
+    <div class="cta-sparkle">✨</div>
+    <h3>¿Te gustó algún diseño?</h3>
+    <p>Podemos personalizarlo para ti — con el nombre, la fecha y todos los detalles que necesites.</p>
+    <a href="index.html#proceso" class="btn-primary" style="display:inline-flex;align-items:center;gap:10px;">
+      ¿Cómo comprar? · Da clic aquí
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8 H13 M9 4 L13 8 L9 12" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-logo">Bella Invitaciones</p>
+  <p>Bella Invitaciones © 2026 · Diseño con amor para tus momentos especiales</p>
+</footer>
+
+<script>
+  // ── Sparkles ──
+  const container = document.getElementById('sparkles');
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    const size = 3 + Math.random() * 6;
+    s.style.cssText = `
+      left: ${Math.random() * 100}%;
+      width: ${size}px; height: ${size}px;
+      animation-duration: ${6 + Math.random() * 10}s;
+      animation-delay: ${Math.random() * 12}s;
+    `;
+    container.appendChild(s);
+  }
+
+  // ── Mobile menu ──
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
