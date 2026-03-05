@@ -339,6 +339,17 @@
     font-size: 1.1rem; color: var(--gold); margin-bottom: 8px;
   }
 
+  /* ── COPY TOAST ── */
+  .copy-toast {
+    position: absolute; top: 50%; right: 14px; transform: translateY(-50%);
+    background: var(--dark); color: #fff;
+    font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 2px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s;
+  }
+  .copy-toast.show { opacity: 1; }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 640px) {
     nav ul { display: none; }
@@ -386,7 +397,8 @@
   <p>Haz que tu día especial sea inolvidable con nuestras invitaciones elegantes y personalizadas. Entrega rápida y proceso simple para que solo disfrutes del momento.</p>
   <div class="hero-btns">
     <a href="#portafolio" class="btn-primary">Ver Portafolio</a>
-    <a href="https://forms.gle/5WPtxy6Yzu1N7ZnW7" target="_blank" class="btn-ghost">Datos &amp; Pedido</a>
+    <a href="#proceso" class="btn-ghost">Proceso de Compra</a>
+    <a href="#precios" class="btn-ghost">Datos para Transferencia</a>
   </div>
 </section>
 
@@ -487,21 +499,7 @@
 
   <div class="steps-grid">
     <!-- Paso 1 -->
-    <div class="step">
-      <div class="step-icon">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-          <rect x="3" y="6" width="22" height="16" rx="2" stroke="#c9a84c" stroke-width="1.5"/>
-          <path d="M3 11 H25" stroke="#c9a84c" stroke-width="1.5"/>
-          <rect x="7" y="15" width="5" height="3" rx="1" stroke="#c9a84c" stroke-width="1.2"/>
-        </svg>
-      </div>
-      <p class="step-num">Paso 01</p>
-      <p class="step-name">Realiza tu Pago</p>
-      <p class="step-desc">Transfiere el pago completo o anticipo según tu tipo de invitación.</p>
-    </div>
-
-    <!-- Paso 2 -->
-    <div class="step">
+    <div class="step" style="cursor:pointer;" onclick="window.open('https://forms.gle/5WPtxy6Yzu1N7ZnW7','_blank')">
       <div class="step-icon">
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
           <rect x="4" y="3" width="20" height="22" rx="2" stroke="#c9a84c" stroke-width="1.5"/>
@@ -510,13 +508,27 @@
           <line x1="8" y1="18" x2="14" y2="18" stroke="#c9a84c" stroke-width="1.2"/>
         </svg>
       </div>
-      <p class="step-num">Paso 02</p>
+      <p class="step-num">Paso 01</p>
       <p class="step-name">Envía tus Datos</p>
       <p class="step-desc">Llena el formulario con nombres, fecha, hora y detalles del evento.</p>
     </div>
 
+    <!-- Paso 2 -->
+    <div class="step" style="cursor:pointer;" onclick="document.getElementById('precios').scrollIntoView({behavior:'smooth'})">
+      <div class="step-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="3" y="6" width="22" height="16" rx="2" stroke="#c9a84c" stroke-width="1.5"/>
+          <path d="M3 11 H25" stroke="#c9a84c" stroke-width="1.5"/>
+          <rect x="7" y="15" width="5" height="3" rx="1" stroke="#c9a84c" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <p class="step-num">Paso 02</p>
+      <p class="step-name">Realiza tu Pago</p>
+      <p class="step-desc">Transfiere el pago completo o anticipo según tu tipo de invitación.</p>
+    </div>
+
     <!-- Paso 3 -->
-    <div class="step">
+    <div class="step" style="cursor:pointer;" onclick="window.open('https://wa.me/6183012070?text=Hola%2C%20me%20interesan%20las%20invitaciones%20de%3A%20_____________','_blank')">
       <div class="step-icon">
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
           <path d="M5 4 C3 4 2 5 2 7 L2 19 C2 21 3 22 5 22 L10 22 L14 26 L18 22 L23 22 C25 22 26 21 26 19 L26 7 C26 5 25 4 23 4 Z" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
@@ -533,7 +545,7 @@
 
   <p class="delivery-note">✦ Entregamos tu diseño en 1–2 días hábiles ✦</p>
 
-  <p class="section-label" style="margin-bottom:24px;">Precios</p>
+  <p class="section-label" id="precios" style="margin-bottom:24px;">Precios</p>
   <div class="prices-grid">
     <div class="price-card featured">
       <p class="price-type">Bodas &amp; XV Años</p>
@@ -566,13 +578,15 @@
       </div>
 
       <div style="display:flex;flex-direction:column;gap:12px;">
-        <div style="background:var(--gold-pale);border-radius:3px;padding:12px 16px;">
-          <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Beneficiario</p>
+        <div style="background:var(--gold-pale);border-radius:3px;padding:12px 16px;cursor:pointer;position:relative;" onclick="copyToClipboard('Dellaneira Alvarado Hidalgo', this)" title="Clic para copiar">
+          <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Beneficiario <span style="font-size:0.6rem;opacity:0.7;">· clic para copiar</span></p>
           <p style="font-size:0.95rem;color:var(--dark);font-weight:400;">Dellaneira Alvarado Hidalgo</p>
+          <span class="copy-toast">¡Copiado!</span>
         </div>
-        <div style="background:var(--gold-pale);border-radius:3px;padding:12px 16px;">
-          <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">CLABE Interbancaria</p>
+        <div style="background:var(--gold-pale);border-radius:3px;padding:12px 16px;cursor:pointer;position:relative;" onclick="copyToClipboard('638180000182526477', this)" title="Clic para copiar">
+          <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">CLABE Interbancaria <span style="font-size:0.6rem;opacity:0.7;">· clic para copiar</span></p>
           <p style="font-size:1rem;color:var(--dark);font-weight:400;letter-spacing:0.06em;font-family:'Lato',sans-serif;">638180000182526477</p>
+          <span class="copy-toast">¡Copiado!</span>
         </div>
         <div style="background:rgba(201,168,76,0.06);border:1px dashed var(--gold-light);border-radius:3px;padding:12px 16px;">
           <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">💳 Depósito en tiendas sin tarjeta</p>
@@ -641,6 +655,15 @@
 </footer>
 
 <script>
+  // ── Copy to clipboard ──
+  function copyToClipboard(text, el) {
+    navigator.clipboard.writeText(text).then(() => {
+      const toast = el.querySelector('.copy-toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    });
+  }
+
   // ── Sparkles generator ──
   const container = document.getElementById('sparkles');
   const count = 18;
