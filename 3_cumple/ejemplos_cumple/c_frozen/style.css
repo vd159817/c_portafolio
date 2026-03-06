@@ -1,0 +1,6 @@
+.ana-img {
+  width: min(520px, 80vw);   /* ya lo tienes, quizá reducir un poco */
+  max-height: 60vh;          /* evita que la imagen empuje demasiado */
+  margin-top: 0;
+  margin-bottom: 0;
+}

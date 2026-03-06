@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Fiesta Frozen! 🧊✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Nunito:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Mountains+of+Christmas:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --ice1:#EEF8FF;
+  --ice3:#88CEED;
+  --deep:#1A4A7A;
+  --purple-light:#B8DEFF;
+  --glow:#D8F0FF;
+  --gold:#FFE580;
+}
+
+html{scroll-behavior:smooth}
+body{background:#0A1E35;color:var(--ice1);font-family:'Nunito',sans-serif;overflow-x:hidden;}
+
+/* ── CANVAS global (copos suaves todo el sitio) ── */
+#snow-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;      /* ya lo tienes */
+  max-height: 100vh;      /* fuerza que no se extienda más */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 100% 55% at 50% 0%, rgba(200,235,255,0.55) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 15% 60%, rgba(100,185,240,0.25) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 40% at 85% 60%, rgba(130,200,255,0.22) 0%, transparent 65%),
+    linear-gradient(180deg, #1A3E6A 0%, #1A4878 30%, #16406E 60%, #0F2C50 100%);
+}
+.aurora{position:absolute;inset:0;z-index:0;overflow:hidden;}
+.aurora-band{position:absolute;width:220%;left:-60%;border-radius:50%;animation:auroraDrift 14s ease-in-out infinite;}
+.aurora-band:nth-child(1){height:380px;top:0%;background:radial-gradient(ellipse at center,rgba(180,225,255,0.18) 0%,transparent 70%);animation-delay:0s;}
+.aurora-band:nth-child(2){height:300px;top:8%;background:radial-gradient(ellipse at center,rgba(140,210,255,0.14) 0%,transparent 70%);animation-delay:-5s;}
+.aurora-band:nth-child(3){height:240px;top:18%;background:radial-gradient(ellipse at center,rgba(200,240,255,0.10) 0%,transparent 70%);animation-delay:-9s;}
+@keyframes auroraDrift{0%,100%{transform:scaleX(1) translateY(0);}50%{transform:scaleX(1.12) translateY(-25px);}}
+
+/* Hero magic snow canvas */
+#hero-snow{position:absolute;inset:0;pointer-events:none;z-index:2;}
+
+/* Copos deco grandes */
+.snowflake-deco{position:absolute;color:rgba(200,235,255,0.18);pointer-events:none;animation:snowRotate 20s linear infinite;z-index:3;line-height:1;}
+.sf1{top:6%;left:4%;font-size:clamp(3rem,7vw,6rem);animation-duration:28s;}
+.sf2{top:8%;right:5%;font-size:clamp(2.5rem,6vw,5rem);animation-duration:20s;animation-direction:reverse;}
+.sf3{bottom:18%;left:6%;font-size:clamp(2rem,5vw,4rem);animation-duration:32s;}
+.sf4{bottom:22%;right:7%;font-size:clamp(2rem,5vw,3.5rem);animation-duration:24s;animation-direction:reverse;}
+.sf5{top:45%;left:1%;font-size:clamp(1rem,3vw,2.5rem);animation-duration:18s;}
+.sf6{top:50%;right:2%;font-size:clamp(1rem,3vw,2rem);animation-duration:15s;animation-direction:reverse;}
+@keyframes snowRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+/* Hero content */
+.hero-content{position:relative;z-index:5;padding-top:clamp(1.5rem,5vh,4rem);}
+.badge{display:inline-block;font-family:'Nunito',sans-serif;font-size:0.72rem;letter-spacing:0.45em;text-transform:uppercase;color:var(--ice3);background:rgba(120,200,255,0.12);border:1px solid rgba(120,200,255,0.3);border-radius:100px;padding:0.35rem 1.2rem;margin-bottom:1.2rem;animation:fadeUp 1s ease both;}
+.hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(3rem,11vw,8rem);font-weight:900;line-height:0.95;background:linear-gradient(135deg,#FFFFFF 0%,#D8F0FF 20%,#88CEED 45%,#C0E8FF 70%,#FFFFFF 100%);background-size:220% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 40px rgba(160,220,255,0.7));animation:fadeUp 1s 0.2s ease both,shimmerText 5s linear infinite;margin-bottom:0.3rem;}
+@keyframes shimmerText{0%{background-position:0% center;}100%{background-position:220% center;}}
+.hero-subtitle{font-family:'Mountains of Christmas',cursive;font-size:clamp(1.3rem,4vw,2.6rem);color:var(--gold);text-shadow:0 0 20px rgba(255,220,80,0.75),0 0 60px rgba(255,200,50,0.3);animation:fadeUp 1s 0.4s ease both;margin-bottom:0.4rem;}
+.hero-name{font-family:'Cinzel Decorative',serif;font-size:clamp(1.8rem,6vw,4.5rem);font-weight:700;color:#fff;text-shadow:0 0 40px rgba(160,225,255,0.95),0 0 80px rgba(120,190,255,0.5);animation:fadeUp 1s 0.6s ease both;margin-bottom:1.2rem;}
+
+.ice-divider{display:flex;align-items:center;gap:1rem;justify-content:center;margin:1rem auto;animation:fadeUp 1s 0.7s ease both;opacity:0.7;}
+.ice-line{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--ice3));}
+.ice-line.r{background:linear-gradient(90deg,var(--ice3),transparent);}
+.ice-diamond{width:10px;height:10px;background:#A8DCF5;transform:rotate(45deg);box-shadow:0 0 12px #A8DCF5,0 0 24px rgba(168,220,245,0.5);}
+
+.hero-date-badge{background:rgba(11,61,107,0.6);border:1px solid rgba(126,200,227,0.4);border-radius:16px;padding:0.8rem 2rem;display:inline-block;backdrop-filter:blur(8px);animation:fadeUp 1s 0.8s ease both;margin-bottom:1.8rem;}
+.hero-date-badge span{font-family:'Cinzel Decorative',serif;font-size:clamp(1rem,2.5vw,1.5rem);color:var(--glow);letter-spacing:0.08em;}
+
+/* Music btn en hero */
+#heroPlayBtn{
+  display:inline-flex;align-items:center;gap:0.7rem;
+  padding:0.8rem 1.8rem;border-radius:100px;
+  background:rgba(126,200,227,0.15);
+  border:1px solid rgba(126,200,227,0.45);
+  color:#fff;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:0.85rem;font-weight:700;letter-spacing:0.08em;
+  backdrop-filter:blur(8px);transition:all 0.3s;
+  animation:fadeUp 1s 1s ease both;
+  box-shadow:0 0 20px rgba(126,200,227,0.2);
+}
+#heroPlayBtn:hover{background:rgba(126,200,227,0.28);border-color:rgba(200,235,255,0.7);box-shadow:0 0 40px rgba(126,200,227,0.45);transform:scale(1.05);}
+.music-note-icon{font-size:1.3rem;animation:noteBounce 1.2s ease-in-out infinite;}
+@keyframes noteBounce{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-4px) rotate(5deg);}}
+.eq-mini{display:none;align-items:flex-end;gap:2px;height:18px;margin-left:4px;}
+.eq-mini.playing{display:flex;}
+.eq-mini-bar{width:3px;border-radius:2px;background:linear-gradient(to top,var(--ice3),var(--purple-light));animation:eqDance 0.5s ease-in-out infinite alternate;}
+.eq-mini-bar:nth-child(1){height:40%;animation-delay:0s;}
+.eq-mini-bar:nth-child(2){height:90%;animation-delay:0.1s;}
+.eq-mini-bar:nth-child(3){height:60%;animation-delay:0.2s;}
+.eq-mini-bar:nth-child(4){height:100%;animation-delay:0.05s;}
+@keyframes eqDance{from{transform:scaleY(0.3);}to{transform:scaleY(1);}}
+
+
+
+/* ── IMAGEN A — halo igual que olaf-img ── */
+.img-a-wrap{position:relative;display:flex;justify-content:center;}
+.img-a-wrap canvas{position:absolute;inset:0;pointer-events:none;z-index:2;border-radius:20px;}
+.img-a{
+  display:block;width:100%;height:auto;border-radius:20px;
+  filter:
+    drop-shadow(0 0 28px rgba(200,240,255,0.8))
+    drop-shadow(0 0 60px rgba(130,195,255,0.45))
+    drop-shadow(0 0 110px rgba(90,170,255,0.25));
+  animation:imgAGlow 4s ease-in-out infinite;
+  position:relative;z-index:1;
+}
+@keyframes imgAGlow{
+  0%,100%{filter:
+    drop-shadow(0 0 22px rgba(185,232,255,0.7))
+    drop-shadow(0 0 55px rgba(130,200,255,0.4))
+    drop-shadow(0 0 90px rgba(90,165,255,0.2));
+  }
+  50%{filter:
+    drop-shadow(0 0 38px rgba(210,245,255,1))
+    drop-shadow(0 0 80px rgba(160,220,255,0.65))
+    drop-shadow(0 0 130px rgba(110,185,255,0.35));
+  }
+}
+
+/* ── IMAGE ROW sin marcos ── */
+.img-row{
+  position:relative;z-index:1;padding:2rem 1rem 4rem;
+  display:flex;justify-content:center;align-items:flex-start;
+  gap:1.2rem;flex-wrap:wrap;
+}
+.img-raw{
+  width:min(240px,75vw);display:block;
+  filter:drop-shadow(0 10px 30px rgba(0,20,60,0.5));
+  transition:transform 0.4s,filter 0.4s;
+}
+.img-raw:hover{transform:translateY(-8px) scale(1.03);filter:drop-shadow(0 20px 50px rgba(126,200,227,0.3)) drop-shadow(0 0 20px rgba(100,150,255,0.2));}
+.img-raw:nth-child(2){transform:translateY(16px);}
+.img-raw:nth-child(2):hover{transform:translateY(8px) scale(1.03);}
+
+/* ── OLAF sección secundaria ── */
+.olaf-section{
+  position:relative;z-index:1;padding:3rem 1.5rem 5rem;
+  display:flex;justify-content:center;align-items:center;
+  gap:3rem;flex-wrap:wrap;overflow:hidden;
+}
+.olaf-img{width:min(200px,50vw);display:block;filter:drop-shadow(0 0 30px rgba(200,240,255,0.4));animation:olafWobble 3s ease-in-out infinite;flex-shrink:0;}
+@keyframes olafWobble{0%,100%{transform:rotate(-3deg) translateY(0);}50%{transform:rotate(3deg) translateY(-8px);}}
+.olaf-quote{max-width:320px;text-align:left;}
+.olaf-quote blockquote{font-family:'Mountains of Christmas',cursive;font-size:clamp(1.3rem,3vw,2rem);color:var(--glow);line-height:1.5;text-shadow:0 0 20px rgba(200,235,255,0.4);margin-bottom:0.8rem;}
+.olaf-quote cite{font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--ice3);opacity:0.6;font-style:normal;font-family:'Nunito',sans-serif;}
+@media(max-width:600px){.olaf-quote{text-align:center;}}
+
+/* ── SECTIONS ── */
+section{position:relative;z-index:1;padding:5rem 1.5rem;}
+.section-inner{max-width:720px;margin:0 auto;text-align:center;}
+.sec-label{font-size:0.65rem;letter-spacing:0.5em;text-transform:uppercase;color:var(--ice3);opacity:0.8;margin-bottom:0.8rem;font-family:'Nunito',sans-serif;font-weight:700;}
+.sec-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.4rem,4vw,2.6rem);background:linear-gradient(135deg,#C7E9FF,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.2rem;}
+
+/* ── COUNTDOWN ── */
+.countdown-section{background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(11,61,107,0.5) 0%,transparent 80%);}
+.countdown{display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;gap:6px;margin-top:2.5rem;}
+.countdown-unit{display:flex;flex-direction:column;align-items:center;background:rgba(11,61,107,0.6);border:1px solid rgba(126,200,227,0.35);border-radius:16px;padding:1.4rem 1.2rem 0.9rem;min-width:82px;backdrop-filter:blur(10px);box-shadow:0 0 20px rgba(100,180,255,0.1),inset 0 1px 0 rgba(255,255,255,0.1);position:relative;overflow:hidden;}
+.countdown-unit::before{content:'';position:absolute;top:0;left:0;right:0;height:40%;background:linear-gradient(180deg,rgba(255,255,255,0.07),transparent);border-radius:16px 16px 0 0;}
+.countdown-number{font-size:clamp(2rem,7vw,3.5rem)!important;font-family:'Cinzel Decorative',serif;font-weight:700;line-height:1;background:linear-gradient(135deg,#FFFFFF,#7EC8E3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 10px rgba(126,200,227,0.7));}
+.countdown-label{font-family:'Nunito',sans-serif;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ice3);opacity:0.8;margin-top:0.5rem;}
+.countdown-sep{font-size:clamp(1.5rem,5vw,2.5rem)!important;font-family:'Cinzel Decorative',serif;color:var(--ice3);opacity:0.5;padding-bottom:1.8rem;}
+
+/* ── INFO CARD ── */
+.info-card{background:rgba(11,61,107,0.5);border:1px solid rgba(126,200,227,0.3);border-radius:24px;padding:2.5rem 2rem;backdrop-filter:blur(12px);box-shadow:0 0 40px rgba(100,180,255,0.1),inset 0 1px 0 rgba(255,255,255,0.08);position:relative;overflow:hidden;margin-top:2rem;}
+.info-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ice3),var(--purple-light),var(--ice3),transparent);}
+.info-card p{font-size:clamp(0.95rem,2vw,1.15rem);line-height:1.9;color:rgba(232,244,253,0.85);font-weight:300;}
+.info-card strong{color:var(--glow);font-weight:700;}
+.info-icon{font-size:2.5rem;margin-bottom:1rem;display:block;}
+
+/* ── BUTTONS ── */
+.buttons-row{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin-top:2.5rem;}
+.btn{display:inline-flex;align-items:center;gap:0.6rem;padding:1rem 2rem;border-radius:100px;font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:900;letter-spacing:0.05em;text-decoration:none;cursor:pointer;border:none;transition:all 0.3s;position:relative;overflow:hidden;}
+.btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.2),transparent);opacity:0;transition:opacity 0.3s;}
+.btn:hover::before{opacity:1;}
+.btn:hover{transform:translateY(-3px);}
+.btn:active{transform:translateY(0);}
+.btn-confirm{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;box-shadow:0 6px 25px rgba(37,211,102,0.35);font-size:1rem;padding:1.1rem 2.5rem;}
+.btn-confirm:hover{box-shadow:0 15px 50px rgba(37,211,102,0.5)!important;}
+.btn-map{background:linear-gradient(135deg,#4285F4,#1A56C4);color:#fff;box-shadow:0 6px 25px rgba(66,133,244,0.35);}
+.btn-map:hover{box-shadow:0 15px 40px rgba(66,133,244,0.5)!important;}
+.btn-icon{font-size:1.3rem;}
+
+.crystal-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem;}
+.crystal-card{background:rgba(200,235,255,0.06);border:1px solid rgba(126,200,227,0.25);border-radius:16px;padding:1.5rem 1.2rem;min-width:140px;flex:1;max-width:180px;backdrop-filter:blur(8px);text-align:center;transition:all 0.3s;box-shadow:inset 0 1px 0 rgba(255,255,255,0.1);}
+.crystal-card:hover{background:rgba(200,235,255,0.1);border-color:rgba(167,139,250,0.5);transform:translateY(-5px);box-shadow:0 10px 30px rgba(100,150,255,0.2),inset 0 1px 0 rgba(255,255,255,0.15);}
+.crystal-icon{font-size:2rem;margin-bottom:0.5rem;display:block;}
+.crystal-val{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--glow);margin-bottom:0.2rem;display:block;}
+.crystal-lbl{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ice3);opacity:0.7;font-family:'Nunito',sans-serif;}
+
+/* ── CONFIRM ── */
+.confirm-section{background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(107,72,200,0.15) 0%,transparent 80%);}
+.confirm-box{background:rgba(11,30,60,0.7);border:1px solid rgba(167,139,250,0.4);border-radius:28px;padding:3rem 2rem;max-width:480px;margin:2rem auto 0;backdrop-filter:blur(16px);box-shadow:0 0 60px rgba(107,72,200,0.2),inset 0 1px 0 rgba(255,255,255,0.07);position:relative;overflow:hidden;text-align:center;}
+.confirm-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--purple-light),transparent);}
+.confirm-box p{font-size:1rem;line-height:1.8;color:rgba(232,244,253,0.8);margin-bottom:2rem;}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:3rem 2rem;border-top:1px solid rgba(126,200,227,0.1);position:relative;z-index:1;}
+.footer-title{font-family:'Cinzel Decorative',serif;font-size:1.8rem;background:linear-gradient(135deg,#C7E9FF,#A78BFA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.4rem;}
+.footer-sub{font-size:0.65rem;letter-spacing:0.4em;text-transform:uppercase;color:rgba(255,255,255,0.2);font-family:'Nunito',sans-serif;}
+
+/* Flecha de scroll */
+.scroll-arrow{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  z-index:10;display:flex;flex-direction:column;align-items:center;gap:4px;
+  animation:arrowBounce 2s ease-in-out infinite;cursor:pointer;
+}
+.scroll-arrow span{
+  display:block;width:22px;height:22px;
+  border-right:2.5px solid rgba(168,220,255,0.85);
+  border-bottom:2.5px solid rgba(168,220,255,0.85);
+  transform:rotate(45deg);
+  box-shadow:3px 3px 12px rgba(120,200,255,0.6);
+  filter:drop-shadow(0 0 6px rgba(140,210,255,0.9));
+}
+.scroll-arrow span:nth-child(1){opacity:0.4;animation:arrowFade 2s ease-in-out infinite 0s;}
+.scroll-arrow span:nth-child(2){opacity:0.7;animation:arrowFade 2s ease-in-out infinite 0.2s;}
+.scroll-arrow span:nth-child(3){opacity:1;  animation:arrowFade 2s ease-in-out infinite 0.4s;}
+@keyframes arrowBounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
+@keyframes arrowFade{0%,100%{opacity:0.15;}50%{opacity:1;}}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.9s ease,transform 0.9s ease;}
+.reveal.visible{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<audio id="audio" src="x.mp3" autoplay loop></audio>
+<canvas id="snow-canvas"></canvas>
+
+<!-- ══════ HERO ══════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="aurora">
+    <div class="aurora-band"></div>
+    <div class="aurora-band"></div>
+    <div class="aurora-band"></div>
+  </div>
+  <canvas id="hero-snow"></canvas>
+
+  <span class="snowflake-deco sf1">❄</span>
+  <span class="snowflake-deco sf2">❅</span>
+  <span class="snowflake-deco sf3">❆</span>
+  <span class="snowflake-deco sf4">❄</span>
+  <span class="snowflake-deco sf5">✦</span>
+  <span class="snowflake-deco sf6">❅</span>
+
+  <div class="hero-content">
+    <div class="badge">✨ Una Invitación Mágica ✨</div>
+    <h1 class="hero-title">Frozen</h1>
+    <p class="hero-subtitle">🎉 ¡Fiesta de Cumpleaños! 🎉</p>
+    <p class="hero-name">¡Te esperamos!</p>
+    <div class="ice-divider">
+      <div class="ice-line"></div>
+      <div class="ice-diamond"></div>
+      <div class="ice-line r"></div>
+    </div>
+    <div class="hero-date-badge">
+      <span>10 · Diciembre · 2026</span>
+    </div>
+    <button id="heroPlayBtn">
+      <span class="music-note-icon">🎵</span>
+      <span id="musicLabel">Reproducir música ❄️</span>
+      <div class="eq-mini" id="eq-mini">
+        <div class="eq-mini-bar"></div>
+        <div class="eq-mini-bar"></div>
+        <div class="eq-mini-bar"></div>
+        <div class="eq-mini-bar"></div>
+      </div>
+    </button>
+  </div>
+
+  <div class="scroll-arrow" onclick="window.scrollBy({top:window.innerHeight,behavior:'smooth'})">
+    <span></span><span></span><span></span>
+  </div>
+</section>
+
+
+<!-- ══════ COUNTDOWN ══════ -->
+<section class="countdown-section reveal">
+  <div class="section-inner">
+    <p class="sec-label">El reino de hielo te espera</p>
+    <h2 class="sec-title">Cuenta Regresiva</h2>
+    <div class="countdown">
+      <div class="countdown-unit"><span class="countdown-number" id="cd-days">00</span><span class="countdown-label">Días</span></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-unit"><span class="countdown-number" id="cd-hours">00</span><span class="countdown-label">Hr</span></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-unit"><span class="countdown-number" id="cd-mins">00</span><span class="countdown-label">Min</span></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-unit"><span class="countdown-number" id="cd-secs">00</span><span class="countdown-label">Seg</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ IMAGEN A ══════ -->
+<div class="video-section reveal">
+  <div class="video-wrap img-a-wrap">
+    <canvas id="snow-a"></canvas>
+    <img src="a.png" alt="Frozen" class="img-a">
+  </div>
+</div>
+
+<!-- ══════ EVENTO ══════ -->
+<section class="reveal">
+  <div class="section-inner">
+    <p class="sec-label">La gran celebración</p>
+    <h2 class="sec-title">Fecha & Lugar ❄</h2>
+    <div class="crystal-row">
+      <div class="crystal-card"><span class="crystal-icon">🗓</span><span class="crystal-val">10 Dic</span><span class="crystal-lbl">2026</span></div>
+      <div class="crystal-card"><span class="crystal-icon">🕖</span><span class="crystal-val">6:00 PM</span><span class="crystal-lbl">Hora de inicio</span></div>
+      <a class="crystal-card" href="https://maps.app.goo.gl/9kk8ecHiLnxXc5Mw7" target="_blank" style="text-decoration:none;cursor:pointer;"><span class="crystal-icon">🎂</span><span class="crystal-val">Juhp Kids</span><span class="crystal-lbl">Ver ubicación</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ OLAF — sección secundaria ══════ -->
+<div class="olaf-section reveal">
+  <img src="b.png" alt="Olaf el muñeco de nieve" class="olaf-img">
+  <div class="olaf-quote">
+    <blockquote>"Algunas personas son como la nieve: ¡te llenan de magia y alegría!" ☀️❄️</blockquote>
+    <cite>— Olaf · Frozen</cite>
+  </div>
+</div>
+
+<!-- ══════ CONFIRMAR ══════ -->
+<section class="confirm-section reveal">
+  <div class="section-inner">
+    <p class="sec-label">¡Te esperamos!</p>
+    <h2 class="sec-title">Confirma tu Asistencia 🌟</h2>
+    <div class="confirm-box">
+      <p>Tu presencia hará esta celebración aún más mágica.<br>
+      Por favor confirma antes del <strong style="color:var(--gold);">1 de Diciembre · 2026</strong> 🧊</p>
+      <a class="btn btn-confirm"
+         href="https://wa.me/526183012070?text=%C2%A1Ir%C3%A9%20a%20la%20fiesta!%20%E2%9C%A8%F0%9F%8E%8A"
+         target="_blank">
+        <span class="btn-icon">💬</span> ¡Confirmar por WhatsApp!
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ FOOTER ══════ -->
+<footer class="footer">
+  <p style="font-size:1.5rem;opacity:0.3;letter-spacing:0.8rem;margin-bottom:1rem;">❄ ❅ ❆</p>
+  <p class="footer-title">¡Nos vemos pronto!</p>
+  <p class="footer-sub">Frozen Party · 10 Diciembre 2026</p>
+  <p style="margin-top:1.2rem;font-style:italic;color:rgba(232,244,253,0.25);font-size:0.85rem;">"El amor verdadero descongela cualquier corazón" ❤️</p>
+</footer>
+
+<script>
+/* ═══ CANVAS GLOBAL — copos suaves todo el sitio ═══ */
+(function(){
+  const c=document.getElementById('snow-canvas');
+  const cx=c.getContext('2d');
+  function resz(){c.width=innerWidth;c.height=innerHeight;}
+  resz();addEventListener('resize',resz);
+  const SHAPES=['❄','❅','❆'];
+  const flakes=[];
+  for(let i=0;i<180;i++){
+    flakes.push({
+      x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+      size:Math.random()*14+3,speed:Math.random()*0.4+0.08,
+      drift:(Math.random()-0.5)*0.25,alpha:Math.random()*0.28+0.06,
+      rot:Math.random()*Math.PI*2,rotV:(Math.random()-0.5)*0.010,
+      shape:SHAPES[Math.floor(Math.random()*3)],
+      wobble:Math.random()*Math.PI*2,wobbleS:Math.random()*0.011+0.002,
+    });
+  }
+  const trailSparks=[];
+  function spawnTrail(tx,ty){
+    for(let i=0;i<6;i++){
+      const ang=Math.random()*Math.PI*2;
+      const sp=Math.random()*3+1;
+      trailSparks.push({x:tx,y:ty,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp-1.5,life:1,alpha:Math.random()*0.7+0.5,shape:SHAPES[Math.floor(Math.random()*SHAPES.length)],size:Math.random()*10+5});
+    }
+  }
+  function draw(){
+    cx.clearRect(0,0,c.width,c.height);
+    cx.textAlign='center';cx.textBaseline='middle';
+    for(const f of flakes){
+      f.y+=f.speed;f.wobble+=f.wobbleS;f.x+=f.drift+Math.sin(f.wobble)*0.2;f.rot+=f.rotV;
+      if(f.y>c.height+20){f.y=-20;f.x=Math.random()*c.width;}
+      if(f.x>c.width+20)f.x=-20;if(f.x<-20)f.x=c.width+20;
+      cx.save();cx.globalAlpha=f.alpha;cx.font=`${f.size}px serif`;cx.fillStyle='#E0F4FF';
+      cx.translate(f.x,f.y);cx.rotate(f.rot);cx.fillText(f.shape,0,0);cx.restore();
+    }
+    for(let i=trailSparks.length-1;i>=0;i--){
+      const s=trailSparks[i];
+      s.x+=s.vx;s.y+=s.vy;s.vy+=0.05;s.life-=0.04;
+      cx.save();cx.globalAlpha=s.life*s.alpha;cx.font=`${s.size}px serif`;cx.fillStyle='#D8F4FF';
+      cx.textAlign='center';cx.textBaseline='middle';cx.fillText(s.shape,s.x,s.y);cx.restore();
+      if(s.life<=0)trailSparks.splice(i,1);
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+  document.addEventListener('touchmove',e=>{for(const t of e.touches)spawnTrail(t.clientX,t.clientY);},{passive:true});
+  document.addEventListener('touchstart',e=>{for(const t of e.touches)spawnTrail(t.clientX,t.clientY);},{passive:true});
+})();
+
+/* ═══ CANVAS HERO — nieve tipo Frozen: densa, blanca, brillante ═══ */
+(function(){
+  const hc=document.getElementById('hero-snow');
+  const hx=hc.getContext('2d');
+  const hero=document.querySelector('.hero');
+  function resz(){hc.width=hero.offsetWidth;hc.height=hero.offsetHeight;}
+  resz();addEventListener('resize',resz);
+
+  // Tres capas: copos grandes, medianos y partículas brillantes de hielo
+  const LAYERS=[
+    {count:35, rMin:3,   rMax:7,   speedMin:0.5, speedMax:1.1, alphaMin:0.55, alphaMax:0.9,  glowMult:4, hueBase:200},
+    {count:70, rMin:1.5, rMax:3.5, speedMin:0.3, speedMax:0.7, alphaMin:0.35, alphaMax:0.7,  glowMult:2, hueBase:205},
+    {count:120,rMin:0.4, rMax:1.5, speedMin:0.1, speedMax:0.4, alphaMin:0.15, alphaMax:0.45, glowMult:1, hueBase:210},
+  ];
+  const magicFlakes=[];
+  for(const L of LAYERS){
+    for(let i=0;i<L.count;i++){
+      magicFlakes.push({
+        x:Math.random()*2000, y:Math.random()*2000,
+        r:L.rMin+Math.random()*(L.rMax-L.rMin),
+        speed:L.speedMin+Math.random()*(L.speedMax-L.speedMin),
+        drift:(Math.random()-0.5)*0.5,
+        alpha:L.alphaMin+Math.random()*(L.alphaMax-L.alphaMin),
+        alphaV:(Math.random()-0.5)*0.008,
+        wobble:Math.random()*Math.PI*2,
+        wobbleS:Math.random()*0.015+0.003,
+        glow:L.glowMult*(L.rMin+Math.random()*(L.rMax-L.rMin))*2.5,
+        hue:L.hueBase+Math.random()*20,
+        layer:L,
+      });
+    }
+  }
+  const magicSparks=[];
+
+  function draw(){
+    hx.clearRect(0,0,hc.width,hc.height);
+    for(const f of magicFlakes){
+      f.y+=f.speed; f.wobble+=f.wobbleS;
+      f.x+=f.drift+Math.sin(f.wobble)*0.4;
+      f.alpha+=f.alphaV;
+      if(f.alpha<f.layer.alphaMin){f.alpha=f.layer.alphaMin;f.alphaV*=-1;}
+      if(f.alpha>f.layer.alphaMax){f.alpha=f.layer.alphaMax;f.alphaV*=-1;}
+      if(f.y>hc.height+10){f.y=-10;f.x=Math.random()*hc.width;}
+      if(f.x>hc.width+20)f.x=-20; if(f.x<-20)f.x=hc.width+20;
+      hx.save();
+      // glow halo
+      const g=hx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.glow);
+      g.addColorStop(0,`hsla(${f.hue},80%,97%,${f.alpha*0.6})`);
+      g.addColorStop(0.5,`hsla(${f.hue},70%,85%,${f.alpha*0.15})`);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      hx.fillStyle=g; hx.beginPath(); hx.arc(f.x,f.y,f.glow,0,Math.PI*2); hx.fill();
+      // núcleo blanco
+      hx.globalAlpha=f.alpha;
+      hx.fillStyle=`hsl(${f.hue},50%,98%)`;
+      hx.beginPath(); hx.arc(f.x,f.y,f.r,0,Math.PI*2); hx.fill();
+      hx.restore();
+    }
+    for(let i=magicSparks.length-1;i>=0;i--){
+      const s=magicSparks[i];
+      s.x+=s.vx; s.y+=s.vy; s.vy+=0.06; s.life-=0.018;
+      hx.save();
+      hx.globalAlpha=s.life*0.85;
+      const sg=hx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*5);
+      sg.addColorStop(0,s.color); sg.addColorStop(1,'rgba(0,0,0,0)');
+      hx.fillStyle=sg; hx.beginPath(); hx.arc(s.x,s.y,s.r*5,0,Math.PI*2); hx.fill();
+      hx.globalAlpha=s.life; hx.fillStyle='#fff';
+      hx.beginPath(); hx.arc(s.x,s.y,s.r,0,Math.PI*2); hx.fill();
+      hx.restore();
+      if(s.life<=0)magicSparks.splice(i,1);
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  function spawnBurst(ex,ey,isTouched){
+    const rect=hc.getBoundingClientRect();
+    const x=ex-rect.left, y=ey-rect.top;
+    const speedMult=isTouched?2.6:1;
+    const upMult=isTouched?5:2.5;
+    for(let i=0;i<28;i++){
+      const ang=Math.PI*2*i/28+(Math.random()-0.5)*0.5;
+      const sp=(Math.random()*6+2)*speedMult;
+      const h=195+Math.random()*40;
+      magicSparks.push({x,y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp-upMult,r:Math.random()*3+0.8,life:1,color:`hsla(${h},85%,92%,0.95)`});
+    }
+  }
+  hero.addEventListener('click',e=>{spawnBurst(e.clientX,e.clientY,false);});
+  hero.addEventListener('touchstart',e=>{for(const t of e.touches)spawnBurst(t.clientX,t.clientY,true);},{passive:true});
+})();
+
+/* ═══ NIEVE SUAVE sobre a.png ═══ */
+(function(){
+  const wrap=document.querySelector('.img-a-wrap');
+  const c=document.getElementById('snow-a');
+  if(!c||!wrap)return;
+  function resize(){c.width=wrap.offsetWidth;c.height=wrap.offsetHeight;}
+  resize();
+  window.addEventListener('resize',resize);
+  const cx=c.getContext('2d');
+  const flakes=[];
+  for(let i=0;i<28;i++){
+    flakes.push({
+      x:Math.random()*c.width, y:Math.random()*c.height,
+      r:Math.random()*2.2+0.6,
+      speed:Math.random()*0.35+0.08,
+      drift:(Math.random()-0.5)*0.25,
+      alpha:Math.random()*0.45+0.15,
+      wobble:Math.random()*Math.PI*2,
+      wobbleS:Math.random()*0.012+0.003,
+    });
+  }
+  function draw(){
+    cx.clearRect(0,0,c.width,c.height);
+    for(const f of flakes){
+      f.y+=f.speed; f.wobble+=f.wobbleS;
+      f.x+=f.drift+Math.sin(f.wobble)*0.18;
+      if(f.y>c.height+6){f.y=-6;f.x=Math.random()*c.width;}
+      if(f.x>c.width+6)f.x=-6; if(f.x<-6)f.x=c.width+6;
+      const g=cx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*3);
+      g.addColorStop(0,`rgba(220,240,255,${f.alpha})`);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      cx.fillStyle=g;
+      cx.beginPath();cx.arc(f.x,f.y,f.r*3,0,Math.PI*2);cx.fill();
+      cx.globalAlpha=f.alpha;
+      cx.fillStyle='#eef8ff';
+      cx.beginPath();cx.arc(f.x,f.y,f.r,0,Math.PI*2);cx.fill();
+      cx.globalAlpha=1;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ═══ COUNTDOWN ═══ */
+const eventDate=new Date('2026-12-10T18:00:00');
+function updateCD(){
+  const diff=eventDate-new Date();
+  if(diff<=0){['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id=>document.getElementById(id).textContent='00');return;}
+  document.getElementById('cd-days').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cd-hours').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-mins').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cd-secs').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+updateCD();setInterval(updateCD,1000);
+
+/* ═══ MUSIC ═══ */
+const audio=document.getElementById('audio');
+const hBtn=document.getElementById('heroPlayBtn');
+const label=document.getElementById('musicLabel');
+const eqMini=document.getElementById('eq-mini');
+
+audio.volume=0.75;
+// Autoplay — solo intento silencioso inicial, sin activar en toda la pantalla
+audio.play().catch(()=>{});
+
+function updateMusicUI(){
+  if(audio.paused){label.textContent='Reproducir ♪';eqMini.classList.remove('playing');}
+  else{label.textContent='Pausar música';eqMini.classList.add('playing');}
+}
+hBtn.addEventListener('click',e=>{
+  e.stopPropagation();
+  if(audio.paused)audio.play();else audio.pause();
+  updateMusicUI();
+});
+audio.addEventListener('play',updateMusicUI);
+audio.addEventListener('pause',updateMusicUI);
+
+/* ═══ SCROLL REVEAL ═══ */
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
