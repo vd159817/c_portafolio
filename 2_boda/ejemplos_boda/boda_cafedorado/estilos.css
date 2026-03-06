@@ -1,0 +1,188 @@
+/* ============================================================
+   BASE
+   ============================================================ */
+
+body {
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+  background-color: #1a1208;
+  color: #e6d8b8;
+}
+
+
+/* ============================================================
+   SECCIONES
+   ============================================================ */
+
+section {
+  padding: 100px 20px;
+}
+
+
+/* ============================================================
+   IMAGEN DE FECHA
+   ============================================================ */
+
+.date-image {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.date-image img {
+  max-width: 90%;
+  width: 420px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ============================================================
+   TARJETAS DE DETALLES
+   ============================================================ */
+
+.details-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.detail-card {
+  aspect-ratio: 1 / 1;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.detail-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.detail-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.detail-card:hover .detail-icon {
+  transform: scale(1.2) rotate(-5deg);
+  filter: drop-shadow(0 0 8px rgba(201, 168, 76, 0.8));
+}
+
+.highlight {
+  color: #c9a84c;
+  font-weight: bold;
+}
+
+.map-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+
+/* ============================================================
+   RSVP
+   ============================================================ */
+
+.rsvp-section {
+  padding-top: 140px;
+  padding-bottom: 140px;
+  text-align: center;
+}
+
+.btn-group {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 14px 28px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: #c9a84c;
+  color: #1a1208;
+}
+
+.btn-primary:hover {
+  background: #b8963e;
+}
+
+.btn-outline {
+  border: 1px solid #c9a84c;
+  color: #c9a84c;
+  background: transparent;
+}
+
+.btn-outline:hover {
+  background: rgba(201, 168, 76, 0.15);
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+footer {
+  background: #1a1208;
+  padding: 160px 20px;
+  text-align: center;
+  color: #c9a84c;
+}
+
+
+/* ============================================================
+   RESPONSIVE — MÓVIL (max 800px)
+   ============================================================ */
+
+@media (max-width: 800px) {
+  .details-cards {
+    grid-template-columns: 1fr;  /* una sola columna en móvil */
+  }
+
+  .detail-card {
+    aspect-ratio: auto;
+    flex-direction: row;
+    text-align: left;
+    gap: 16px;
+  }
+
+  .detail-icon {
+    font-size: 28px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+}
+.detail-card > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.detail-card p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: rgba(249,244,236,0.85);
+  line-height: 1.6;
+  white-space: normal;
+  word-wrap: break-word;
+}
