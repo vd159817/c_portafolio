@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍄 ¡Fiesta de Mario! 🍄</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Fredoka+One&display=swap');
+
+  :root {
+    --mario-red: #e52222;
+    --mario-blue: #3b6bcc;
+    --mario-yellow: #f7c842;
+    --mario-green: #3ba03b;
+    --brick-orange: #c84c0c;
+    --sky-blue: #5c94fc;
+    --coin-gold: #f8b800;
+    --cloud-white: #fff;
+    --dark-bg: #000;
+    --pipe-green: #00a800;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    overflow: hidden;
+    font-family: 'Press Start 2P', monospace;
+    cursor: none;
+  }
+
+  /* ======= CUSTOM CURSOR ======= */
+  .cursor {
+    width: 32px; height: 32px;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    transition: transform 0.05s;
+  }
+
+  /* ======= SCREEN 1: CLICK TO START ======= */
+  #screen-start {
+    position: fixed; inset: 0;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: opacity 0.8s ease;
+  }
+
+  .start-logo {
+    font-size: clamp(28px, 6vw, 60px);
+    color: var(--mario-red);
+    text-shadow: 4px 4px 0 #7a0000, 0 0 30px #ff0000aa;
+    text-align: center;
+    line-height: 1.6;
+    letter-spacing: 4px;
+    animation: logoPulse 1.5s ease-in-out infinite;
+    margin-bottom: 20px;
+  }
+
+  .start-sub {
+    font-size: clamp(10px, 2vw, 18px);
+    color: var(--mario-yellow);
+    text-shadow: 2px 2px 0 #7a5000;
+    text-align: center;
+    margin-bottom: 60px;
+    animation: fadeInUp 1s ease both;
+  }
+
+  .press-start-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(10px, 2.5vw, 20px);
+    color: #fff;
+    background: var(--mario-red);
+    border: 4px solid #fff;
+    padding: 18px 36px;
+    cursor: pointer;
+    animation: blinkBtn 0.9s step-end infinite;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 6px 6px 0 #7a0000, 0 0 30px #ff0000aa;
+    transition: transform 0.1s, box-shadow 0.1s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .press-start-btn:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 10px 10px 0 #7a0000, 0 0 50px #ff0000cc;
+  }
+  .press-start-btn:active {
+    transform: scale(0.96) translateY(3px);
+    box-shadow: 2px 2px 0 #7a0000;
+  }
+
+  .start-mario-sprite {
+    font-size: 80px;
+    animation: marioIdle 0.5s step-end infinite, floatBob 2s ease-in-out infinite;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 0 20px #ff0000aa);
+  }
+
+  .start-bg-stars {
+    position: absolute; inset: 0; z-index: -1; overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle var(--dur) ease-in-out infinite;
+    opacity: 0;
+  }
+
+  /* ======= TRANSITION TUNNEL ======= */
+  #screen-tunnel {
+    position: fixed; inset: 0;
+    background: #000;
+    display: none;
+    z-index: 200;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tunnel-pipe {
+    width: 120px; height: 120px;
+    position: relative;
+    z-index: 10;
+    animation: pipeAppear 0.5s ease both;
+  }
+
+  .pipe-svg { width: 100%; height: 100%; }
+
+  .falling-mario {
+    font-size: 70px;
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: marioFall 0s linear both;
+    z-index: 20;
+    filter: drop-shadow(0 4px 8px #00000088);
+  }
+
+  .tunnel-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 6px solid transparent;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    animation: tunnelRingExpand var(--speed) linear infinite;
+    opacity: 0;
+  }
+
+  .warp-text {
+    font-size: clamp(12px, 3vw, 28px);
+    color: #00ff88;
+    text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff44;
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    animation: warpTextBlink 0.4s step-end infinite;
+    letter-spacing: 3px;
+  }
+
+  .speed-lines {
+    position: absolute; inset: 0;
+    background: repeating-conic-gradient(
+      from 0deg at 50% 50%,
+      #ffffff08 0deg, transparent 2deg,
+      transparent 10deg, #4488ff08 12deg
+    );
+    animation: spinLines 0.5s linear infinite;
+  }
+
+  .falling-items {
+    position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+  }
+
+  .fall-item {
+    position: absolute;
+    font-size: clamp(16px, 3vw, 36px);
+    top: -60px;
+    animation: fallThrough var(--fdur) linear forwards;
+    opacity: 0.8;
+  }
+
+  /* ======= SCREEN 2: INVITATION ======= */
+  #screen-invite {
+    position: fixed; inset: 0;
+    background: var(--sky-blue);
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  /* SKY BACKGROUND */
+  .sky-bg {
+    position: fixed; inset: 0;
+    background: linear-gradient(180deg, #5c94fc 0%, #8ab4ff 60%, #b8d4ff 100%);
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  /* CLOUDS */
+  .cloud {
+    position: absolute;
+    background: #fff;
+    border-radius: 50px;
+    animation: cloudFloat var(--cspeed) linear infinite;
+    opacity: 0.9;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .cloud::before { width: 60%; height: 130%; top: -40%; left: 15%; }
+  .cloud::after  { width: 40%; height: 110%; top: -30%; right: 15%; }
+
+  /* GROUND */
+  .ground-layer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--brick-orange) 0px, var(--brick-orange) 60px,
+      #a83a08 60px, #a83a08 62px,
+      var(--brick-orange) 62px, var(--brick-orange) 122px
+    );
+    z-index: 5;
+    border-top: 6px solid #7a2a00;
+    box-shadow: inset 0 8px 0 #e05010;
+  }
+
+  /* PIPES */
+  .pipe {
+    position: fixed;
+    bottom: 80px;
+    width: 80px;
+    z-index: 6;
+    animation: pipeRise 1s cubic-bezier(0.2,1.5,0.5,1) both;
+  }
+
+  .pipe-head {
+    height: 28px;
+    background: linear-gradient(90deg, #006000, #00c000 40%, #00a000);
+    border: 4px solid #004000;
+    border-radius: 6px 6px 0 0;
+    box-shadow: inset 0 -4px 0 #004000;
+    margin: 0 -8px;
+  }
+  .pipe-body {
+    background: linear-gradient(90deg, #007000, #00d000 40%, #00a800);
+    border: 4px solid #005000;
+    border-left-width: 8px;
+    border-right-width: 8px;
+  }
+
+  /* CONTENT */
+  .invite-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 20px 160px;
+    gap: 30px;
+  }
+
+  /* TITLE CARD */
+  .title-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 8px solid var(--mario-yellow);
+    border-radius: 16px;
+    padding: 30px 40px;
+    text-align: center;
+    box-shadow: 0 0 0 4px #c84c0c, 0 20px 60px #00000088, 0 0 80px #f7c84244;
+    position: relative;
+    overflow: hidden;
+    max-width: 700px;
+    width: 100%;
+    animation: cardSlideDown 0.8s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.2s;
+  }
+
+  .title-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent, transparent 20px,
+      rgba(255,255,255,0.02) 20px, rgba(255,255,255,0.02) 40px
+    );
+  }
+
+  .super-text {
+    font-size: clamp(8px, 2vw, 14px);
+    color: var(--coin-gold);
+    letter-spacing: 8px;
+    text-shadow: 2px 2px 0 #7a5000;
+    animation: coinGlow 1.5s ease-in-out infinite alternate;
+    margin-bottom: 12px;
+  }
+
+  .party-title {
+    font-size: clamp(20px, 5vw, 48px);
+    color: var(--mario-red);
+    text-shadow: 4px 4px 0 #7a0000, 0 0 30px #ff000088;
+    line-height: 1.3;
+    margin-bottom: 10px;
+    animation: titlePop 0.6s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.5s;
+  }
+
+  .birthday-name {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(36px, 8vw, 80px);
+    background: linear-gradient(180deg, #f7c842 0%, #ff8c00 50%, #f7c842 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(4px 4px 0 #7a5000);
+    animation: nameShine 2s ease-in-out infinite alternate, titlePop 0.6s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.7s, 0.7s;
+    line-height: 1.1;
+  }
+
+  .coins-row {
+    display: flex; gap: 12px; justify-content: center;
+    margin-top: 14px;
+  }
+
+  .coin-spin {
+    font-size: 28px;
+    animation: coinFlip 0.8s linear infinite;
+    animation-delay: var(--cd);
+    filter: drop-shadow(0 0 8px #f7c842aa);
+  }
+
+  /* INFO CARD */
+  .info-card {
+    background: linear-gradient(135deg, #e52222 0%, #c81010 100%);
+    border: 6px solid var(--mario-yellow);
+    border-radius: 14px;
+    padding: 28px 36px;
+    text-align: center;
+    box-shadow: 0 0 0 3px #7a0000, 0 16px 40px #00000066;
+    max-width: 700px; width: 100%;
+    animation: cardSlideUp 0.8s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .info-card::after {
+    content: '★★★';
+    position: absolute;
+    bottom: -8px; right: 20px;
+    font-size: 40px;
+    color: rgba(255,255,255,0.06);
+    letter-spacing: 6px;
+  }
+
+  .section-icon { font-size: 36px; margin-bottom: 8px; display: block; }
+
+  .info-label {
+    font-size: clamp(7px, 1.5vw, 11px);
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 4px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .info-value {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(20px, 4vw, 36px);
+    color: #fff;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.4);
+    margin-bottom: 18px;
+    line-height: 1.2;
+  }
+
+  .divider {
+    height: 4px;
+    background: repeating-linear-gradient(90deg, transparent 0, transparent 8px, rgba(255,255,255,0.3) 8px, rgba(255,255,255,0.3) 16px);
+    margin: 14px 0;
+    border-radius: 2px;
+  }
+
+  /* COSTUME CARD */
+  .costume-card {
+    background: linear-gradient(135deg, #3b6bcc 0%, #1a3a8c 100%);
+    border: 6px solid var(--mario-yellow);
+    border-radius: 14px;
+    padding: 28px 36px;
+    text-align: center;
+    box-shadow: 0 0 0 3px #0a1a6a, 0 16px 40px #00000066;
+    max-width: 700px; width: 100%;
+    animation: cardSlideUp 0.8s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.6s;
+  }
+
+  .costume-title {
+    font-size: clamp(9px, 2vw, 16px);
+    color: var(--mario-yellow);
+    text-shadow: 2px 2px 0 #7a5000;
+    margin-bottom: 16px;
+    letter-spacing: 2px;
+  }
+
+  .costume-grid {
+    display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;
+  }
+
+  .costume-item {
+    background: rgba(255,255,255,0.12);
+    border: 3px solid rgba(255,255,255,0.25);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    transition: transform 0.2s, background 0.2s;
+    cursor: default;
+    min-width: 90px;
+  }
+  .costume-item:hover {
+    transform: translateY(-6px) scale(1.06);
+    background: rgba(255,255,255,0.22);
+  }
+
+  .costume-emoji { font-size: 36px; animation: float var(--fd) ease-in-out infinite; }
+
+  .costume-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(11px, 2vw, 15px);
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+  }
+
+  /* RSVP CARD */
+  .rsvp-card {
+    background: linear-gradient(135deg, #3ba03b 0%, #1a6a1a 100%);
+    border: 6px solid var(--mario-yellow);
+    border-radius: 14px;
+    padding: 28px 36px;
+    text-align: center;
+    box-shadow: 0 0 0 3px #0a4a0a, 0 16px 40px #00000066;
+    max-width: 700px; width: 100%;
+    animation: cardSlideUp 0.8s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.8s;
+  }
+
+  .rsvp-title {
+    font-size: clamp(9px, 2vw, 14px);
+    color: var(--mario-yellow);
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+    text-shadow: 2px 2px 0 #0a4a0a;
+  }
+
+  .phone-big {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(24px, 5vw, 46px);
+    color: #fff;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.4);
+    margin: 8px 0 16px;
+    letter-spacing: 3px;
+  }
+
+  .rsvp-note {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(13px, 2.5vw, 20px);
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+  }
+
+  .confirm-btn {
+    display: inline-block;
+    background: var(--mario-yellow);
+    color: #3a2000;
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(8px, 1.8vw, 13px);
+    padding: 14px 28px;
+    border-radius: 8px;
+    border: 4px solid #c88000;
+    box-shadow: 4px 4px 0 #7a5000;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 16px;
+    display: inline-block;
+    transition: transform 0.1s, box-shadow 0.1s;
+    animation: btnPulse 1.5s ease-in-out infinite;
+  }
+  .confirm-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 6px 6px 0 #7a5000;
+  }
+
+  /* FLOATING ITEMS */
+  .floating-items {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+  }
+
+  .float-mushroom, .float-star, .float-coin, .float-flower {
+    position: absolute;
+    font-size: clamp(20px, 3vw, 36px);
+    animation: floatRandom var(--dur) ease-in-out infinite;
+    opacity: 0.7;
+  }
+
+  /* QUESTION BLOCKS */
+  .q-block {
+    position: fixed;
+    bottom: 80px;
+    width: 60px; height: 60px;
+    background: var(--coin-gold);
+    border: 4px solid #c88000;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #7a5000;
+    font-family: 'Press Start 2P', monospace;
+    box-shadow: inset 0 -6px 0 #c88000, 0 8px 0 #7a5000;
+    cursor: pointer;
+    z-index: 7;
+    transition: transform 0.1s;
+    animation: blockBounce var(--bb) ease-in-out infinite;
+  }
+  .q-block:hover { transform: translateY(-4px); }
+  .q-block:active { transform: translateY(2px); }
+
+  .coin-pop {
+    position: fixed;
+    font-size: 28px;
+    z-index: 100;
+    pointer-events: none;
+    animation: coinPopAnim 0.7s ease-out forwards;
+  }
+
+  /* BOTTOM CHARACTERS */
+  .bottom-chars {
+    position: fixed;
+    bottom: 80px;
+    left: 0; right: 0;
+    display: flex; justify-content: center; gap: 30px;
+    z-index: 8;
+    pointer-events: none;
+  }
+
+  .char-run {
+    font-size: clamp(30px, 5vw, 55px);
+    animation: charRun var(--cr) ease-in-out infinite;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+  }
+
+  /* FIREWORKS */
+  .firework {
+    position: fixed;
+    pointer-events: none;
+    z-index: 300;
+  }
+
+  .fw-particle {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    animation: fwParticle var(--fwt) ease-out forwards;
+  }
+
+  /* ======= SCORE BAR ======= */
+  .score-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #000;
+    padding: 10px 24px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 20;
+    border-bottom: 4px solid var(--mario-yellow);
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .score-item {
+    text-align: center;
+  }
+
+  .score-label {
+    font-size: clamp(6px, 1.2vw, 9px);
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+  .score-value {
+    font-size: clamp(10px, 1.8vw, 14px);
+    color: var(--coin-gold);
+    text-shadow: 2px 2px 0 #7a5000;
+  }
+
+  /* TIMER */
+  .party-timer {
+    position: fixed;
+    top: 60px; right: 20px;
+    background: rgba(0,0,0,0.85);
+    border: 3px solid var(--mario-yellow);
+    border-radius: 10px;
+    padding: 12px 16px;
+    z-index: 20;
+    text-align: center;
+    display: none;
+    box-shadow: 0 0 20px #f7c84244;
+  }
+
+  .timer-label {
+    font-size: clamp(6px, 1vw, 8px);
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .timer-value {
+    font-size: clamp(18px, 3vw, 26px);
+    color: var(--mario-red);
+    text-shadow: 2px 2px 0 #7a0000;
+  }
+
+  /* MODAL POPUP */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-box {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 8px solid var(--mario-yellow);
+    border-radius: 20px;
+    padding: 36px 48px;
+    text-align: center;
+    max-width: 500px; width: 90%;
+    box-shadow: 0 0 0 4px #c84c0c, 0 30px 80px #000;
+    animation: modalPop 0.5s cubic-bezier(0.2,1.5,0.5,1) both;
+  }
+  .modal-title {
+    font-size: clamp(14px, 3vw, 22px);
+    color: var(--mario-yellow);
+    margin-bottom: 16px;
+    text-shadow: 3px 3px 0 #7a5000;
+  }
+  .modal-body {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(16px, 3vw, 24px);
+    color: #fff;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .modal-close {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(8px, 1.5vw, 12px);
+    background: var(--mario-red);
+    color: #fff;
+    border: 3px solid #7a0000;
+    padding: 12px 24px;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 3px 3px 0 #7a0000;
+    transition: transform 0.1s;
+  }
+  .modal-close:hover { transform: scale(1.05); }
+
+  /* ======= KEYFRAMES ======= */
+  @keyframes logoPulse {
+    0%,100% { transform: scale(1); text-shadow: 4px 4px 0 #7a0000, 0 0 30px #ff0000aa; }
+    50% { transform: scale(1.04); text-shadow: 4px 4px 0 #7a0000, 0 0 60px #ff0000ff; }
+  }
+  @keyframes blinkBtn {
+    0%,49% { opacity: 1; } 50%,100% { opacity: 0; }
+  }
+  @keyframes floatBob {
+    0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); }
+  }
+  @keyframes marioIdle {
+    0% { filter: drop-shadow(0 0 20px #ff0000aa); }
+    50% { filter: drop-shadow(0 0 35px #ff6600cc); }
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes tunnelRingExpand {
+    0%   { width: 30px; height: 30px; opacity: 0.9; }
+    100% { width: 200vmax; height: 200vmax; opacity: 0; }
+  }
+  @keyframes fallThrough {
+    0%   { top: -80px; opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { top: 110vh; opacity: 0; }
+  }
+  @keyframes spinLines {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes warpTextBlink {
+    0%,49% { opacity: 1; color: #00ff88; }
+    50%,100% { opacity: 0; }
+  }
+  @keyframes cloudFloat {
+    from { transform: translateX(-200px); }
+    to   { transform: translateX(calc(100vw + 200px)); }
+  }
+  @keyframes coinGlow {
+    from { text-shadow: 2px 2px 0 #7a5000, 0 0 10px #f7c842; }
+    to   { text-shadow: 2px 2px 0 #7a5000, 0 0 30px #f7c842; }
+  }
+  @keyframes titlePop {
+    from { transform: scale(0.3); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  @keyframes nameShine {
+    from { filter: drop-shadow(4px 4px 0 #7a5000) brightness(1);   }
+    to   { filter: drop-shadow(4px 4px 0 #7a5000) brightness(1.3); }
+  }
+  @keyframes coinFlip {
+    0%   { transform: scaleX(1); }
+    25%  { transform: scaleX(0.2); }
+    50%  { transform: scaleX(1); }
+    75%  { transform: scaleX(0.2); }
+    100% { transform: scaleX(1); }
+  }
+  @keyframes cardSlideDown {
+    from { transform: translateY(-60px) scale(0.9); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  @keyframes cardSlideUp {
+    from { transform: translateY(60px) scale(0.9); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  @keyframes pipeRise {
+    from { transform: translateY(200px); }
+    to   { transform: translateY(0); }
+  }
+  @keyframes floatRandom {
+    0%,100% { transform: translateY(0) rotate(-5deg); }
+    50%      { transform: translateY(-20px) rotate(5deg); }
+  }
+  @keyframes charRun {
+    0%,100% { transform: scaleX(1) translateY(0); }
+    25%      { transform: scaleX(1) translateY(-12px); }
+    50%      { transform: scaleX(1) translateY(0); }
+    75%      { transform: scaleX(1) translateY(-8px); }
+  }
+  @keyframes blockBounce {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+  @keyframes coinPopAnim {
+    0%   { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-80px) scale(1.5); opacity: 0; }
+  }
+  @keyframes fwParticle {
+    0%   { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--fx), var(--fy)) scale(0); opacity: 0; }
+  }
+  @keyframes modalPop {
+    from { transform: scale(0.5) rotate(-5deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+  }
+  @keyframes btnPulse {
+    0%,100% { box-shadow: 4px 4px 0 #7a5000, 0 0 0 transparent; }
+    50%      { box-shadow: 4px 4px 0 #7a5000, 0 0 20px #f7c842aa; }
+  }
+  @keyframes pipeAppear {
+    from { transform: scale(0) rotate(-20deg); }
+    to   { transform: scale(1) rotate(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ETIQUETA DE MÚSICA -->
+<audio id="musicaFondo" src="a.mp3" loop></audio>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor">⭐</div>
+
+<!-- ======= SCREEN 1: START ======= -->
+<div id="screen-start">
+  <div class="start-bg-stars" id="starField"></div>
+  <div class="start-mario-sprite" id="startMario">🍄</div>
+  <div class="start-logo">SUPER MARIO<br>PARTY</div>
+  <div class="start-sub">¡Una aventura épica te espera!</div>
+  <button class="press-start-btn" onclick="startTransition()">
+    ▶ ¡TOCA PARA JUGAR!
+  </button>
+</div>
+
+<!-- ======= SCREEN 2: TUNNEL TRANSITION ======= -->
+<div id="screen-tunnel">
+  <div class="speed-lines"></div>
+  <div class="falling-items" id="fallingItems"></div>
+  <div id="tunnelRings"></div>
+  <img src="c.png" class="falling-mario" id="fallingMario" style="width: 70px; height: auto;">
+  <div class="warp-text" id="warpText">WARP ZONE ★ ENTRANDO AL REINO HONGOS...</div>
+</div>
+
+<!-- ======= SCREEN 3: INVITATION ======= -->
+<div id="screen-invite">
+  <div class="sky-bg" id="skyBg"></div>
+  <div class="floating-items" id="floatingItems"></div>
+
+  <!-- Score Bar -->
+  <div class="score-bar" id="scoreBar">
+    <div class="score-item">
+      <div class="score-label">MARIO</div>
+      <div class="score-value" id="scoreVal">000000</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">🍄 VIDAS</div>
+      <div class="score-value">× 3</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">⭐ MUNDO</div>
+      <div class="score-value">1 - 1</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">🪙 MONEDAS</div>
+      <div class="score-value" id="coinsVal">00</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">⏱ TIEMPO</div>
+      <div class="score-value" id="timeVal">400</div>
+    </div>
+  </div>
+
+  <!-- Party Timer -->
+  <div class="party-timer" id="partyTimer">
+    <div class="timer-label">FIESTA EN</div>
+    <div class="timer-value" id="countdown">🎉</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="invite-content" id="inviteContent" style="padding-top: 80px;">
+
+    <!-- TITLE CARD -->
+    <div class="title-card">
+      <div class="super-text">✦ MUNDO 1-1 ✦</div>
+      <div class="party-title">¡BIENVENIDO A LA<br>GRAN FIESTA DE!</div>
+      <div class="birthday-name">Sebastián</div>
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(16px,3vw,28px); color:rgba(255,255,255,0.85); margin-top:8px; text-shadow: 2px 2px 0 rgba(0,0,0,0.5);">¡Cumple 6 años! 🎂</div>
+      <div class="coins-row">
+        <span class="coin-spin" style="--cd:0s">🪙</span>
+        <span class="coin-spin" style="--cd:0.1s">⭐</span>
+        <span class="coin-spin" style="--cd:0.2s">🍄</span>
+        <span class="coin-spin" style="--cd:0.3s">🌸</span>
+        <span class="coin-spin" style="--cd:0.4s">🍄</span>
+        <span class="coin-spin" style="--cd:0.5s">⭐</span>
+        <span class="coin-spin" style="--cd:0.6s">🪙</span>
+      </div>
+    </div>
+
+    <!-- DATE & TIME CARD -->
+    <div class="info-card">
+      <span class="section-icon">📅</span>
+      <div class="info-label">NIVEL: FECHA</div>
+      <div class="info-value">Sábado 19 de Diciembre, 2026</div>
+      <div class="divider"></div>
+      <span class="section-icon">⏰</span>
+      <div class="info-label">NIVEL: HORA</div>
+      <div class="info-value">4:00 PM – 8:00 PM</div>
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(12px,2vw,18px); color:rgba(255,255,255,0.8); margin-top:4px;">
+        ¡No llegues tarde o Bowser se roba el pastel! 🐉🎂
+      </div>
+    </div>
+
+    <!-- LOCATION CARD -->
+    <div class="info-card" style="background:linear-gradient(135deg,#7b3f20,#4a2010);">
+      <span class="section-icon">📍</span>
+      <div class="info-label">NIVEL: UBICACIÓN</div>
+      <div class="info-value">Salón "Reino Hongos"</div>
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,22px); color:rgba(255,255,255,0.85); margin-bottom:12px; line-height:1.5;">
+        Calle Piranha Plant #42<br>Col. Bowser, CDMX
+      </div>
+      <div class="divider"></div>
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(12px,2vw,18px); color:var(--mario-yellow); text-shadow:1px 1px 0 rgba(0,0,0,0.5);">
+        🗺️ (A solo 2 bloques del castillo de la Princesa Peach)
+      </div>
+    </div>
+
+<div class="costume-card">
+      <div class="costume-title">🎭 DISFRAZ — ¡VEN COMO TU PERSONAJE FAVORITO!</div>
+      <div class="costume-grid">
+        
+        <div class="costume-item">
+          <img src="d.png" alt="Mario" class="costume-emoji" style="--fd:2.1s; width: 50px; height: auto;">
+          <span class="costume-label">Mario</span>
+        </div>
+        <div class="costume-item">
+          <img src="e.png" alt="Luigi" class="costume-emoji" style="--fd:2.4s; width: 50px; height: auto;">
+          <span class="costume-label">Luigi</span>
+        </div>
+        <div class="costume-item">
+          <img src="f.png" alt="Peach" class="costume-emoji" style="--fd:1.8s; width: 50px; height: auto;">
+          <span class="costume-label">Peach</span>
+        </div>
+        <div class="costume-item">
+          <img src="g.png" alt="Yoshi" class="costume-emoji" style="--fd:2.7s; width: 50px; height: auto;">
+          <span class="costume-label">Yoshi</span>
+        </div>
+        <div class="costume-item">
+          <img src="h.png" alt="Toad" class="costume-emoji" style="--fd:2.2s; width: 50px; height: auto;">
+          <span class="costume-label">Toad</span>
+        </div>
+        <div class="costume-item">
+          <img src="i.png" alt="Bowser" class="costume-emoji" style="--fd:1.9s; width: 50px; height: auto;">
+          <span class="costume-label">Bowser</span>
+        </div>
+        <div class="costume-item">
+          <img src="k.png" alt="Rosalina" class="costume-emoji" style="--fd:2.0s; width: 50px; height: auto;">
+          <span class="costume-label">Rosalina</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ACTIVITIES CARD -->
+    <div class="info-card" style="background:linear-gradient(135deg,#8b008b,#4b0082);">
+      <span class="section-icon">🎮</span>
+      <div class="info-label">NIVEL: ACTIVIDADES</div>
+      <div style="display:flex; flex-direction:column; gap:12px; text-align:left; margin-top:8px;">
+        <div style="display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.1); border-radius:10px; padding:12px 16px;">
+          <span style="font-size:28px;">🕹️</span>
+          <span style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,20px); color:#fff;">Torneo de Super Mario Kart</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.1); border-radius:10px; padding:12px 16px;">
+          <span style="font-size:28px;">🧱</span>
+          <span style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,20px); color:#fff;">Piñata Gigante de Bowser</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.1); border-radius:10px; padding:12px 16px;">
+          <span style="font-size:28px;">🎂</span>
+          <span style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,20px); color:#fff;">Pastel temático + Sorpresas</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.1); border-radius:10px; padding:12px 16px;">
+          <span style="font-size:28px;">📸</span>
+          <span style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,20px); color:#fff;">Foto con Mario & Luigi</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.1); border-radius:10px; padding:12px 16px;">
+          <span style="font-size:28px;">🎁</span>
+          <span style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,20px); color:#fff;">¡Bolsas mágicas de regalo!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RSVP CARD -->
+    <div class="rsvp-card">
+      <span class="section-icon">📞</span>
+      <div class="rsvp-title">CONFIRMACIÓN DE ASISTENCIA</div>
+      <div class="phone-big">📱 55 1234 5678</div>
+      <div class="rsvp-note">
+        Confirma antes del<br>
+        <strong>12 de Diciembre</strong><br>
+        ¡Tu misión es no faltar! ⭐
+      </div>
+      <br>
+      <a href="https://wa.me/5512345678?text=¡Confirmo%20asistencia%20a%20la%20fiesta%20de%20Sebastián!" class="confirm-btn" target="_blank">
+        💬 CONFIRMAR VÍA WHATSAPP
+      </a>
+    </div>
+
+    <!-- FINAL NOTE -->
+    <div class="title-card" style="padding:20px 30px;">
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(16px,3vw,26px); color:var(--mario-yellow); margin-bottom:10px; text-shadow:2px 2px 0 #7a5000;">
+        ¡Recuerda!
+      </div>
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(13px,2.5vw,20px); color:rgba(255,255,255,0.9); line-height:1.7;">
+        Cada invitado recibirá<br>
+        <span style="color:var(--coin-gold);">⭐ Una estrella de poder ⭐</span><br>
+        al entrar al salón 🎉<br><br>
+        <span style="font-size:clamp(10px,2vw,16px); color:rgba(255,255,255,0.65);">
+          Con ❤️ de la familia García López
+        </span>
+      </div>
+      <div style="margin-top:14px; font-size:clamp(24px,5vw,48px);">
+        🍄⭐🪙🌸🍄⭐🪙🌸
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Ground and Pipes -->
+  <div class="ground-layer"></div>
+  <div class="pipe" style="right:60px;" id="pipe1">
+    <div class="pipe-head"></div>
+    <div class="pipe-body" style="height:80px;"></div>
+  </div>
+  <div class="pipe" style="left:60px; animation-delay:0.2s;" id="pipe2">
+    <div class="pipe-head"></div>
+    <div class="pipe-body" style="height:120px;"></div>
+  </div>
+
+  <!-- Question Blocks -->
+  <div class="q-block" style="left:50%; transform:translateX(-50%); --bb:2.1s;" onclick="hitBlock(this)">?</div>
+  <div class="q-block" style="left:calc(50% + 100px); --bb:1.7s;" onclick="hitBlock(this)">?</div>
+  <div class="q-block" style="left:calc(50% - 100px); --bb:2.5s;" onclick="hitBlock(this)">?</div>
+
+  <!-- Running Characters -->
+  <div class="bottom-chars">
+    <img src="c.png" class="char-run" style="--cr:0.5s; width: 55px; height: auto;">
+    <span class="char-run" style="--cr:0.55s; animation-delay:0.2s">🍄</span>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title">🪙 ¡BLOQUE MÁGICO!</div>
+    <div class="modal-body" id="modalBody">¡Encontraste una sorpresa!</div>
+    <button class="modal-close" onclick="closeModal()">✓ ¡ENTENDIDO!</button>
+  </div>
+</div>
+
+<script>
+  // ======= CURSOR =======
+  const cursor = document.getElementById('cursor');
+  const cursors = ['⭐','🍄','🪙','⭐','🌸','🍄'];
+  let ci = 0;
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  setInterval(() => {
+    ci = (ci+1) % cursors.length;
+    cursor.textContent = cursors[ci];
+  }, 800);
+
+  // ======= STAR FIELD =======
+  const sf = document.getElementById('starField');
+  for(let i=0; i<120; i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;--dur:${(Math.random()*2+1).toFixed(2)}s;animation-delay:${(Math.random()*3).toFixed(2)}s`;
+    sf.appendChild(s);
+  }
+
+  // Change start sprite cyclically
+  const sprites = ['🍄','⭐','🪙','🌸','🎮','🎂','🏆'];
+  let si = 0;
+  const startMario = document.getElementById('startMario');
+  setInterval(() => {
+    si = (si+1) % sprites.length;
+    startMario.style.transform = 'scale(0)';
+    setTimeout(() => {
+      startMario.textContent = sprites[si];
+      startMario.style.transform = 'scale(1)';
+      startMario.style.transition = 'transform 0.3s cubic-bezier(0.2,1.5,0.5,1)';
+    }, 200);
+  }, 1500);
+
+  // ======= TRANSITION =======
+// ======= TRANSITION =======
+// ======= TRANSITION =======
+  let juegoIniciado = false; // 🔒 Candado de seguridad
+
+  function startTransition(){
+    // Si ya se presionó el botón, ignoramos los siguientes toques
+    if (juegoIniciado) return; 
+    juegoIniciado = true;
+
+    // 👇 MÚSICA INICIADA CORRECTAMENTE 👇
+    document.getElementById('musicaFondo').play();
+
+    const ss = document.getElementById('screen-start');
+    const st = document.getElementById('screen-tunnel');
+
+    ss.style.opacity = '0';
+    setTimeout(() => {
+      ss.style.display = 'none';
+      st.style.display = 'flex';
+
+      // Spawn tunnel rings
+      const rings = document.getElementById('tunnelRings');
+      const colors = ['#00ff88','#4488ff','#ff4488','#ffdd00','#ff8800','#00ddff','#ff44ff'];
+      for(let i=0; i<10; i++){
+        const r = document.createElement('div');
+        r.className = 'tunnel-ring';
+        r.style.cssText = `border-color:${colors[i%colors.length]};--speed:${(0.8 + i*0.15).toFixed(2)}s;animation-delay:${(i*0.1).toFixed(2)}s`;
+        rings.appendChild(r);
+      }
+
+      // Spawn falling items
+      const items = ['🍄','⭐','🪙','🌸','🐢','🎮','💎','🏆','🎂','🌺','🔮','💥'];
+      const fi = document.getElementById('fallingItems');
+      // 📉 Bajamos la cantidad a 15 emojis (siguen viéndose geniales pero no traban el móvil)
+      for(let i=0; i<15; i++){
+        const it = document.createElement('div');
+        it.className = 'fall-item';
+        it.textContent = items[Math.floor(Math.random()*items.length)];
+        it.style.cssText = `left:${Math.random()*100}%;--fdur:${(1.5 + Math.random()*2.5).toFixed(2)}s;animation-delay:${(Math.random()*3).toFixed(2)}s;font-size:${Math.floor(16 + Math.random()*30)}px`;
+        fi.appendChild(it);
+      }
+
+      // Falling mario
+      const fm = document.getElementById('fallingMario');
+      fm.style.animation = 'none';
+      fm.style.top = '-120px';
+      setTimeout(() => {
+        fm.style.transition = 'top 3s cubic-bezier(0.4,0,0.8,1)';
+        fm.style.top = '110vh';
+      }, 100);
+
+      // Warp text cycle
+      const warps = [
+        'WARP ZONE ★ ENTRANDO AL REINO HONGOS...',
+        '¡CARGANDO MUNDO 1-1!',
+        '¡RECOGIENDO MONEDAS!',
+        '¡EVITANDO A BOWSER!',
+        '¡CASI LLEGAMOS AL CASTILLO!',
+        '★★★ ¡FIESTA CARGADA! ★★★'
+      ];
+      let wi = 0;
+      const wt = document.getElementById('warpText');
+      const warpInterval = setInterval(() => {
+        wi++;
+        if(wi < warps.length){
+          wt.style.opacity = '0';
+          setTimeout(() => {
+            wt.textContent = warps[wi];
+            wt.style.opacity = '1';
+          }, 200);
+        } else {
+          clearInterval(warpInterval);
+        }
+      }, 700);
+
+      // After 4.5s, show invitation
+      setTimeout(showInvitation, 4500);
+    }, 800);
+  }
+
+  function showInvitation(){
+    const st = document.getElementById('screen-tunnel');
+    const si = document.getElementById('screen-invite');
+    const sb = document.getElementById('scoreBar');
+    const pt = document.getElementById('partyTimer');
+
+    st.style.opacity = '0';
+    setTimeout(() => {
+      st.style.display = 'none';
+      si.style.display = 'flex';
+      sb.style.display = 'flex';
+      pt.style.display = 'block';
+      setTimeout(() => { si.style.opacity = '1'; }, 50);
+
+      buildSky();
+      buildFloating();
+      startScoreCount();
+      startPartyTimer();
+      startFireworks();
+    }, 500);
+  }
+
+  // ======= SKY BACKGROUND =======
+  function buildSky(){
+    const sky = document.getElementById('skyBg');
+    const clouds = [
+      {w:160,h:50,t:8,d:22},
+      {w:220,h:60,t:15,d:35},
+      {w:140,h:45,t:25,d:18},
+      {w:190,h:55,t:5,d:28},
+      {w:170,h:48,t:35,d:25},
+      {w:200,h:58,t:18,d:40},
+    ];
+    clouds.forEach((c,i) => {
+      const cl = document.createElement('div');
+      cl.className = 'cloud';
+      cl.style.cssText = `width:${c.w}px;height:${c.h}px;top:${c.t}%;--cspeed:${c.d}s;left:${-c.w-20}px;animation-delay:${i*4}s`;
+      sky.appendChild(cl);
+    });
+  }
+
+  // ======= FLOATING ITEMS =======
+  function buildFloating(){
+    const fi = document.getElementById('floatingItems');
+    const items = [
+      {e:'🍄',x:5,y:20,d:3.1},{e:'⭐',x:85,y:15,d:2.8},{e:'🪙',x:15,y:50,d:3.5},
+      {e:'🌸',x:80,y:45,d:2.5},{e:'🍄',x:50,y:10,d:3.8},{e:'⭐',x:60,y:60,d:2.2},
+      {e:'🪙',x:30,y:30,d:4.1},{e:'🌺',x:92,y:70,d:2.9},{e:'💎',x:8,y:75,d:3.3},
+      {e:'🏆',x:70,y:25,d:2.6},{e:'🎮',x:42,y:80,d:3.7},{e:'🌸',x:55,y:35,d:2.4},
+    ];
+    items.forEach((it,i) => {
+      const el = document.createElement('div');
+      el.className = 'float-mushroom';
+      el.textContent = it.e;
+      el.style.cssText = `left:${it.x}%;top:${it.y}%;--dur:${it.d}s;animation-delay:${(i*0.4).toFixed(1)}s;font-size:${Math.floor(20+Math.random()*20)}px`;
+      fi.appendChild(el);
+    });
+  }
+
+  // ======= SCORE COUNT =======
+  function startScoreCount(){
+    let score = 0;
+    let coins = 0;
+    setInterval(() => {
+      score += Math.floor(Math.random()*150 + 50);
+      coins = Math.min(99, coins + (Math.random() < 0.1 ? 1 : 0));
+      document.getElementById('scoreVal').textContent = String(score).padStart(6,'0');
+      document.getElementById('coinsVal').textContent = String(coins).padStart(2,'0');
+    }, 300);
+
+    let time = 400;
+    setInterval(() => {
+      if(time > 0) time--;
+      document.getElementById('timeVal').textContent = String(time).padStart(3,'0');
+    }, 1000);
+  }
+
+  // ======= PARTY TIMER =======
+  function startPartyTimer(){
+    const partyDate = new Date('2026-12-19T16:00:00');
+    function updateTimer(){
+      const now = new Date();
+      const diff = partyDate - now;
+      if(diff <= 0){
+        document.getElementById('countdown').textContent = '¡HOY! 🎉';
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      document.getElementById('countdown').textContent = `${d}d ${h}h ${m}m`;
+    }
+    updateTimer();
+    setInterval(updateTimer, 60000);
+  }
+
+  // ======= QUESTION BLOCKS =======
+  const blockMessages = [
+    {icon:'⭐', msg:'¡ESTRELLA DE PODER!\n¡Obtienes invencibilidad!\n¡No te pierdas la fiesta!'},
+    {icon:'🍄', msg:'¡SÚPER MUSHROOM!\n¡Creciste el doble de emoción!\n¡La fiesta te espera!'},
+    {icon:'🪙', msg:'¡100 MONEDAS!\n¡Una vida extra de diversión!\n¡Confirma tu asistencia!'},
+    {icon:'🌸', msg:'¡FLOR DE FUEGO!\n¡Lanzarás bolas de fuego de alegría!\n¡Sebastián te invita!'},
+    {icon:'💎', msg:'¡DIAMANTE AZUL!\n¡Premio secreto en la fiesta!\n¡No faltes!'},
+    {icon:'🏆', msg:'¡COPA DORADA!\n¡Eres el jugador #1!\n¡Te vemos el 19 de julio!'},
+  ];
+  let blockIdx = 0;
+
+  function hitBlock(el){
+    el.style.transform = 'translateY(-20px)';
+    el.style.background = '#888';
+    el.style.cursor = 'default';
+    el.style.animation = 'none';
+    el.onclick = null;
+
+    const msg = blockMessages[blockIdx % blockMessages.length];
+    blockIdx++;
+
+    // Coin pop
+    const rect = el.getBoundingClientRect();
+    const pop = document.createElement('div');
+    pop.className = 'coin-pop';
+    pop.textContent = msg.icon;
+    pop.style.cssText = `left:${rect.left + rect.width/2 - 14}px;top:${rect.top - 30}px`;
+    document.body.appendChild(pop);
+    setTimeout(() => pop.remove(), 800);
+
+    // Show modal
+    document.getElementById('modalBody').innerHTML = msg.msg.replace(/\n/g,'<br>');
+    document.getElementById('modal').style.display = 'flex';
+
+    // Firework at block
+    spawnFirework(rect.left + rect.width/2, rect.top);
+
+    setTimeout(() => { el.style.transform = ''; }, 200);
+  }
+
+  function closeModal(){
+    document.getElementById('modal').style.display = 'none';
+  }
+
+  // ======= FIREWORKS =======
+  function spawnFirework(x, y){
+    const colors = ['#f7c842','#e52222','#3b6bcc','#3ba03b','#ff66cc','#00ffff','#ff8800'];
+    const fw = document.createElement('div');
+    fw.className = 'firework';
+    fw.style.cssText = `left:${x}px;top:${y}px`;
+    document.body.appendChild(fw);
+
+    for(let i=0; i<16; i++){
+      const angle = (i / 16) * 360;
+      const dist = 60 + Math.random() * 80;
+      const rad = (angle * Math.PI) / 180;
+      const fx = Math.cos(rad) * dist;
+      const fy = Math.sin(rad) * dist;
+      const p = document.createElement('div');
+      p.className = 'fw-particle';
+      p.style.cssText = `background:${colors[Math.floor(Math.random()*colors.length)]};--fx:${fx}px;--fy:${fy}px;--fwt:${(0.5+Math.random()*0.5).toFixed(2)}s;animation-delay:${(Math.random()*0.1).toFixed(2)}s`;
+      fw.appendChild(p);
+    }
+    setTimeout(() => fw.remove(), 1200);
+  }
+
+  function startFireworks(){
+    // Initial burst
+    setTimeout(() => {
+      for(let i=0; i<5; i++){
+        setTimeout(() => {
+          spawnFirework(
+            Math.random() * window.innerWidth,
+            Math.random() * window.innerHeight * 0.6
+          );
+        }, i * 300);
+      }
+    }, 500);
+
+    // Periodic fireworks
+    setInterval(() => {
+      if(Math.random() < 0.4){
+        spawnFirework(
+          Math.random() * window.innerWidth,
+          Math.random() * window.innerHeight * 0.7
+        );
+      }
+    }, 2000);
+  }
+
+  // Touch support
+  document.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    cursor.style.left = t.clientX + 'px';
+    cursor.style.top = t.clientY + 'px';
+  });
+</script>
+</body>
+</html>
