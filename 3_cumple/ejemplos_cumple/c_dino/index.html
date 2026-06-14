@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡36 Dinoaños de José Juan!</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,700;1,9..40,400&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:        #F4F0E6;
+  --bg2:       #EDE8D8;
+  --turquesa:  #2ABFBF;
+  --fucsia:    #E8366B;
+  --mostaza:   #E8A820;
+  --lima:      #7DC95E;
+  --verde:     #2D6A4F;
+  --texto:     #1C2B1A;
+  --suave:     #7A8C78;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--texto);
+  font-family:'DM Sans',sans-serif;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* ──────────────── TEXTURA DE FONDO (pisadas d.png) ──────────────── */
+.bg-tracks{
+  position:fixed;inset:0;
+  background-image:url('d.png');
+  background-size:320px auto;
+  opacity:0.055;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ──────────────── PARTÍCULAS FLOTANTES ──────────────── */
+.floating-items{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
+.fi{position:absolute;will-change:transform;}
+
+/* ──────────────── HERO ──────────────── */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:3rem 1.5rem 2rem;
+  overflow:hidden;
+  z-index:2;
+}
+
+.hero-bg-gradient{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(42,191,191,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 10% 70%, rgba(125,201,94,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 60%, rgba(232,54,107,0.10) 0%, transparent 60%),
+    linear-gradient(175deg, var(--bg) 0%, var(--bg2) 100%);
+}
+
+/* Líneas decorativas diagonales */
+.hero-lines{
+  position:absolute;inset:0;z-index:0;overflow:hidden;
+}
+.hero-lines::before{
+  content:'';
+  position:absolute;
+  top:-30%;left:-10%;
+  width:60%;height:160%;
+  border-right:1.5px solid rgba(42,191,191,0.12);
+  transform:rotate(-8deg);
+}
+.hero-lines::after{
+  content:'';
+  position:absolute;
+  top:-30%;right:5%;
+  width:40%;height:160%;
+  border-left:1.5px solid rgba(232,168,32,0.15);
+  transform:rotate(6deg);
+}
+
+/* Badge superior */
+.hero-badge{
+  position:relative;z-index:5;
+  display:inline-flex;align-items:center;gap:0.6rem;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.72rem;font-weight:700;
+  letter-spacing:0.35em;text-transform:uppercase;
+  color:var(--turquesa);
+  background:rgba(42,191,191,0.10);
+  border:1px solid rgba(42,191,191,0.3);
+  border-radius:100px;
+  padding:0.4rem 1.4rem;
+  margin-bottom:1.6rem;
+  animation:fadeUp 0.9s ease both;
+}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--turquesa);animation:pulse 1.8s ease infinite;}
+
+/* Nombre */
+.hero-name{
+  position:relative;z-index:5;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(1.1rem,4vw,1.8rem);
+  letter-spacing:0.5em;
+  color:var(--suave);
+  text-transform:uppercase;
+  animation:fadeUp 0.9s 0.1s ease both;
+  margin-bottom:0.5rem;
+}
+
+/* Título principal */
+.hero-title{
+  position:relative;z-index:5;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(3.5rem,12vw,9rem);
+  font-weight:900;
+  line-height:0.88;
+  text-align:center;
+  background:linear-gradient(135deg, var(--verde) 0%, var(--turquesa) 40%, var(--lima) 70%, var(--turquesa) 100%);
+  background-size:250% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 4px 20px rgba(42,191,191,0.25));
+  animation:fadeUp 0.9s 0.2s ease both, shimmer 6s linear infinite;
+  margin-bottom:0.3rem;
+}
+.hero-title-line2{
+  font-style:italic;
+  font-size:clamp(2rem,7vw,5.5rem);
+  background:linear-gradient(135deg, var(--fucsia) 0%, var(--mostaza) 60%, var(--fucsia) 100%);
+  background-size:220% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  display:block;
+  animation:shimmer 5s 1s linear infinite;
+}
+
+/* Número grande */
+.hero-number{
+  position:relative;z-index:5;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(7rem,28vw,18rem);
+  line-height:0.85;
+  background:linear-gradient(170deg, var(--mostaza) 0%, rgba(232,168,32,0.3) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 8px 30px rgba(232,168,32,0.20));
+  animation:fadeUp 0.9s 0.3s ease both;
+  user-select:none;
+  pointer-events:none;
+  margin-bottom:-1rem;
+}
+
+/* Dino A — imagen principal grande */
+.dino-a-wrap{
+  position:relative;z-index:5;
+  width:min(400px, 88vw);
+  margin:0 auto 1rem;
+  animation:fadeUp 0.9s 0.35s ease both;
+}
+.dino-a-wrap img{
+  width:100%;display:block;
+  filter:drop-shadow(0 12px 40px rgba(42,191,191,0.45)) drop-shadow(0 4px 12px rgba(0,0,0,0.12));
+  animation:dinoFloat 5s ease-in-out infinite;
+}
+
+/* Canvas de brillitos sobre dino A */
+#sparkle-canvas{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:6;
+}
+.dino-a-halo{
+  position:absolute;
+  bottom:-20px;left:50%;transform:translateX(-50%);
+  width:70%;height:24px;
+  background:radial-gradient(ellipse,rgba(42,191,191,0.25) 0%,transparent 70%);
+  filter:blur(8px);
+  animation:haloBreath 5s ease-in-out infinite;
+}
+
+/* Divider */
+.divider{
+  position:relative;z-index:5;
+  display:flex;align-items:center;gap:1rem;
+  justify-content:center;
+  margin:1.8rem auto;
+  width:min(400px,85vw);
+  animation:fadeUp 0.9s 0.5s ease both;
+}
+.div-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--turquesa));}
+.div-line.r{background:linear-gradient(90deg,var(--turquesa),transparent);}
+.div-icon{font-size:1.3rem;}
+
+/* Info cards */
+.info-cards{
+  position:relative;z-index:5;
+  display:flex;gap:1rem;flex-wrap:wrap;
+  justify-content:center;
+  margin:0 auto 2rem;
+  max-width:600px;
+  animation:fadeUp 0.9s 0.55s ease both;
+}
+.info-card{
+  background:rgba(255,255,255,0.65);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(42,191,191,0.2);
+  border-radius:14px;
+  padding:0.8rem 1.4rem;
+  text-align:center;
+  flex:1;min-width:130px;
+  box-shadow:0 4px 20px rgba(42,191,191,0.08), 0 1px 4px rgba(0,0,0,0.06);
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+.info-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(42,191,191,0.18);}
+.info-card-icon{font-size:1.4rem;margin-bottom:0.3rem;display:block;}
+.info-card-label{font-size:0.65rem;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--suave);margin-bottom:0.2rem;}
+.info-card-value{font-size:0.95rem;font-weight:700;color:var(--texto);}
+.info-card-sub{font-size:0.78rem;color:var(--suave);}
+.ic-turquesa{border-color:rgba(42,191,191,0.35);background:rgba(42,191,191,0.07);}
+.ic-fucsia{border-color:rgba(232,54,107,0.25);background:rgba(232,54,107,0.05);}
+.ic-mostaza{border-color:rgba(232,168,32,0.35);background:rgba(232,168,32,0.07);}
+
+/* Tagline */
+.hero-tagline{
+  position:relative;z-index:5;
+  font-family:'Playfair Display',serif;
+  font-style:italic;
+  font-size:clamp(1rem,3vw,1.5rem);
+  color:var(--texto);
+  text-align:center;
+  max-width:420px;
+  line-height:1.55;
+  opacity:0.85;
+  animation:fadeUp 0.9s 0.65s ease both;
+  margin-bottom:1.5rem;
+}
+.tagline-accent{color:var(--fucsia);font-weight:700;font-style:normal;}
+
+/* CTA confirmación */
+.cta-btn{
+  position:relative;z-index:5;
+  display:inline-flex;align-items:center;gap:0.6rem;
+  padding:0.9rem 2.2rem;
+  border-radius:100px;
+  background:linear-gradient(135deg,var(--fucsia),#c0294f);
+  color:#fff;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.88rem;font-weight:700;letter-spacing:0.06em;
+  text-decoration:none;
+  box-shadow:0 6px 24px rgba(232,54,107,0.35);
+  transition:transform 0.3s,box-shadow 0.3s;
+  animation:fadeUp 0.9s 0.75s ease both;
+  cursor:pointer;border:none;
+}
+.cta-btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 10px 36px rgba(232,54,107,0.5);}
+.cta-pulse{animation:ctaPulse 2.5s ease-in-out infinite;}
+
+/* ──────────────── SECTION: GIF & DINO C ──────────────── */
+.mid-section{
+  position:relative;z-index:2;
+  padding:4rem 1.5rem;
+  background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 50%,var(--bg) 100%);
+  overflow:hidden;
+}
+.mid-content{
+  max-width:750px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;
+  align-items:center;
+}
+@media(max-width:580px){.mid-content{grid-template-columns:1fr;gap:2rem;}}
+
+.gif-wrap{
+  display:flex;flex-direction:column;align-items:center;gap:0.8rem;
+}
+.gif-frame{
+  background:rgba(255,255,255,0.7);
+  border:2px solid rgba(42,191,191,0.25);
+  border-radius:18px;
+  padding:1rem;
+  box-shadow:0 8px 32px rgba(42,191,191,0.12);
+  display:inline-block;
+}
+.gif-frame img{
+  width:min(160px,40vw);display:block;border-radius:10px;
+}
+.gif-label{
+  font-size:0.68rem;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--turquesa);text-align:center;
+}
+
+.dino-c-wrap{
+  position:relative;display:flex;justify-content:flex-end;
+}
+.dino-c-wrap img{
+  width:min(220px,55vw);display:block;
+  filter:drop-shadow(0 8px 28px rgba(125,201,94,0.3));
+  animation:dinoRocking 4s ease-in-out infinite;
+}
+.dino-c-bubble{
+  position:absolute;top:-10px;left:0;
+  background:#fff;
+  border:1.5px solid rgba(232,168,32,0.35);
+  border-radius:14px 14px 14px 4px;
+  padding:0.6rem 1rem;
+  font-size:0.8rem;font-weight:700;
+  color:var(--texto);
+  box-shadow:0 4px 16px rgba(0,0,0,0.07);
+  max-width:160px;line-height:1.4;
+  animation:bubbleAppear 0.8s 1.2s ease both;opacity:0;
+}
+.dino-c-bubble::after{
+  content:'';position:absolute;
+  bottom:-10px;left:14px;
+  border:5px solid transparent;
+  border-top-color:#fff;
+}
+
+/* ──────────────── SECTION: MENSAJE / DETAILS ──────────────── */
+.detail-section{
+  position:relative;z-index:2;
+  padding:4rem 1.5rem 5rem;
+  text-align:center;
+}
+.detail-inner{max-width:580px;margin:0 auto;}
+.section-kicker{
+  font-size:0.68rem;font-weight:700;letter-spacing:0.35em;text-transform:uppercase;
+  color:var(--fucsia);margin-bottom:0.8rem;display:block;
+}
+.section-heading{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,6vw,3.5rem);font-weight:900;
+  line-height:1.05;color:var(--texto);
+  margin-bottom:1.2rem;
+}
+.section-heading em{color:var(--turquesa);font-style:italic;}
+.detail-text{
+  font-size:1rem;line-height:1.7;color:var(--suave);
+  margin-bottom:2rem;
+}
+.detail-text strong{color:var(--texto);}
+
+/* Timeline de detalles */
+.detail-timeline{
+  display:flex;flex-direction:column;gap:0;
+  margin:2rem auto;max-width:400px;text-align:left;
+}
+.dtl{
+  display:flex;gap:1.2rem;align-items:flex-start;
+  padding:1rem 0;
+  border-bottom:1px solid rgba(42,191,191,0.12);
+  position:relative;
+}
+.dtl:last-child{border-bottom:none;}
+.dtl-icon{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;flex-shrink:0;
+}
+.dtl-icon.t{background:rgba(42,191,191,0.12);}
+.dtl-icon.f{background:rgba(232,54,107,0.10);}
+.dtl-icon.m{background:rgba(232,168,32,0.12);}
+.dtl-icon.l{background:rgba(125,201,94,0.12);}
+.dtl-body{}
+.dtl-label{font-size:0.65rem;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--suave);}
+.dtl-value{font-size:1rem;font-weight:700;color:var(--texto);}
+.dtl-sub{font-size:0.8rem;color:var(--suave);}
+
+/* ──────────────── SECTION: DINO B (final) ──────────────── */
+.closing-section{
+  position:relative;z-index:2;
+  padding:3rem 1.5rem 5rem;
+  background:linear-gradient(170deg, rgba(42,191,191,0.05) 0%, var(--bg2) 100%);
+  text-align:center;
+  overflow:hidden;
+}
+.closing-content{max-width:560px;margin:0 auto;}
+.closing-quote{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.4rem,4vw,2.2rem);
+  font-style:italic;font-weight:700;
+  color:var(--texto);
+  line-height:1.4;
+  margin-bottom:2rem;
+}
+.closing-quote span{color:var(--fucsia);}
+.dino-b-wrap{
+  margin:0 auto;
+  width:min(240px,60vw);
+  position:relative;
+}
+.dino-b-wrap img{
+  width:100%;display:block;
+  filter:drop-shadow(0 10px 32px rgba(42,191,191,0.25));
+  animation:dinoSit 6s ease-in-out infinite;
+}
+
+/* Hashtag */
+.closing-hashtag{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(1.5rem,5vw,2.8rem);
+  letter-spacing:0.12em;
+  background:linear-gradient(90deg,var(--fucsia),var(--mostaza),var(--turquesa));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-top:1.8rem;
+  display:block;
+}
+
+/* ──────────────── COUNTDOWN ──────────────── */
+.countdown-wrap{
+  position:relative;z-index:5;
+  display:flex;gap:0.8rem;justify-content:center;
+  margin:1.5rem auto;
+  animation:fadeUp 0.9s 0.9s ease both;
+}
+.cd-unit{
+  background:rgba(255,255,255,0.7);
+  border:1.5px solid rgba(42,191,191,0.2);
+  border-radius:12px;padding:0.6rem 0.9rem;
+  text-align:center;min-width:58px;
+  backdrop-filter:blur(8px);
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+.cd-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem;line-height:1;
+  color:var(--turquesa);display:block;
+}
+.cd-lbl{font-size:0.55rem;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--suave);}
+
+/* ──────────────── CONFETTI CANVAS ──────────────── */
+#confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;}
+
+/* ──────────────── SCROLL REVEAL ──────────────── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+/* mid-content sin gif — centrado */
+.mid-content--single{
+  display:flex;justify-content:center;
+}
+.mid-content--single .dino-c-wrap{justify-content:center;}
+
+/* ──────────────── BOTÓN MÚSICA FIJO ──────────────── */
+#music-btn{
+  position:fixed;bottom:1.1rem;left:1.1rem;z-index:999;
+  display:inline-flex;align-items:center;gap:0.5rem;
+  padding:0.55rem 1.1rem;
+  border-radius:100px;
+  background:rgba(255,255,255,0.82);
+  backdrop-filter:blur(14px);
+  border:1.5px solid rgba(42,191,191,0.35);
+  color:var(--texto);
+  font-family:'DM Sans',sans-serif;
+  font-size:0.78rem;font-weight:700;
+  letter-spacing:0.04em;
+  cursor:pointer;
+  box-shadow:0 4px 18px rgba(42,191,191,0.18), 0 1px 4px rgba(0,0,0,0.08);
+  transition:transform 0.2s, box-shadow 0.2s, background 0.2s;
+  white-space:nowrap;
+}
+#music-btn:hover{
+  transform:scale(1.07);
+  box-shadow:0 6px 28px rgba(42,191,191,0.35);
+}
+#music-btn.playing{
+  background:rgba(42,191,191,0.15);
+  border-color:rgba(42,191,191,0.6);
+}
+#music-btn.exploding{
+  animation:btnExplode 0.35s ease forwards;
+}
+@keyframes btnExplode{
+  0%{transform:scale(1);}
+  40%{transform:scale(1.35);}
+  70%{transform:scale(0.92);}
+  100%{transform:scale(1);}
+}
+
+/* ──────────────── ANIMACIONES ──────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}
+@keyframes shimmer{0%{background-position:0% center;}100%{background-position:250% center;}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.4);}}
+@keyframes dinoFloat{0%,100%{transform:translateY(0) rotate(-1deg);}50%{transform:translateY(-12px) rotate(1deg);}}
+@keyframes haloBreath{0%,100%{transform:translateX(-50%) scaleX(1);opacity:0.6;}50%{transform:translateX(-50%) scaleX(1.15);opacity:0.9;}}
+@keyframes dinoRocking{0%,100%{transform:rotate(-2deg);}50%{transform:rotate(2deg) translateY(-6px);}}
+@keyframes dinoSit{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@keyframes bubbleAppear{from{opacity:0;transform:scale(0.8)translateY(8px);}to{opacity:1;transform:none;}}
+@keyframes ctaPulse{0%,100%{box-shadow:0 6px 24px rgba(232,54,107,0.35);}50%{box-shadow:0 6px 40px rgba(232,54,107,0.65);}}
+
+/* Floating items animation */
+@keyframes floatItem{
+  0%{transform:translateY(0) rotate(0deg);}
+  33%{transform:translateY(-18px) rotate(6deg);}
+  66%{transform:translateY(8px) rotate(-4deg);}
+  100%{transform:translateY(0) rotate(0deg);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Audio -->
+<audio id="audio" src="x.mp3" loop></audio>
+
+<!-- Botón música fijo -->
+<button id="music-btn" onclick="toggleMusic()" title="Reproducir música">
+  Reproducir música 🦖✨
+</button>
+
+<!-- Canvas confetti -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Textura pisadas de fondo -->
+<div class="bg-tracks"></div>
+
+<!-- Elementos flotantes orgánicos -->
+<div class="floating-items" id="floating-items">
+  <!-- Se insertan por JS -->
+</div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero">
+  <div class="hero-bg-gradient"></div>
+  <div class="hero-lines"></div>
+
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Librería Rehilete · 7 de Marzo · 4:00 PM
+  </div>
+
+  <div class="hero-name">José Juan</div>
+
+  <h1 class="hero-title">
+    36<br>
+    <span class="hero-title-line2">Dinoaños</span>
+  </h1>
+
+  <!-- Dino A — protagonista -->
+  <div class="dino-a-wrap">
+    <canvas id="sparkle-canvas"></canvas>
+    <img src="a.png" alt="Dinosaurio con libro">
+    <div class="dino-a-halo"></div>
+  </div>
+
+  <!-- Countdown -->
+  <div class="countdown-wrap">
+    <div class="cd-unit"><span class="cd-num" id="cd-days">--</span><span class="cd-lbl">días</span></div>
+    <div class="cd-unit"><span class="cd-num" id="cd-hours">--</span><span class="cd-lbl">horas</span></div>
+    <div class="cd-unit"><span class="cd-num" id="cd-mins">--</span><span class="cd-lbl">min</span></div>
+    <div class="cd-unit"><span class="cd-num" id="cd-secs">--</span><span class="cd-lbl">seg</span></div>
+  </div>
+
+  <!-- Info cards -->
+  <div class="info-cards">
+    <div class="info-card ic-turquesa">
+      <span class="info-card-icon">📅</span>
+      <div class="info-card-label">Fecha</div>
+      <div class="info-card-value">7 Marzo 2026</div>
+      <div class="info-card-sub">Sábado</div>
+    </div>
+    <div class="info-card ic-fucsia">
+      <span class="info-card-icon">⏰</span>
+      <div class="info-card-label">Hora</div>
+      <div class="info-card-value">4:00 PM</div>
+      <div class="info-card-sub">En punto</div>
+    </div>
+    <div class="info-card ic-mostaza">
+      <span class="info-card-icon">📍</span>
+      <div class="info-card-label">Lugar</div>
+      <div class="info-card-value">Rehilete</div>
+      <div class="info-card-sub">Librería</div>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="div-line"></div>
+    <span class="div-icon">🦕</span>
+    <div class="div-line r"></div>
+  </div>
+
+  <p class="hero-tagline">
+    Te invito a mis <span class="tagline-accent">36 dinoañitos</span>
+  </p>
+
+
+</section>
+
+<!-- ═══════════════════ MID SECTION ═══════════════════ -->
+<section class="mid-section reveal">
+  <div class="mid-content mid-content--single">
+    <div class="dino-c-wrap">
+      <div class="dino-c-bubble">
+        ¡No faltes! 🦕
+      </div>
+      <img src="c.png" alt="Dinosaurio">
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ DETAIL SECTION ═══════════════════ -->
+<section class="detail-section reveal">
+  <div class="detail-inner">
+    <span class="section-kicker">🎉 Cumpleaños</span>
+    <h2 class="section-heading">
+      <em>36 vueltas al sol</em>
+    </h2>
+  </div>
+</section>
+
+<!-- ═══════════════════ CLOSING ═══════════════════ -->
+<section class="closing-section reveal">
+  <div class="closing-content">
+    <p class="closing-quote">
+      "Los dinosaurios se extinguieron.<br>
+      Los libros, <span>jamás.</span>"
+    </p>
+
+    <div class="dino-b-wrap">
+      <img src="b.png" alt="Dino sentado">
+    </div>
+
+    <span class="closing-hashtag">#36DinoañosDeJoséJuan</span>
+
+    <div class="divider" style="margin-top:2rem;">
+      <div class="div-line"></div>
+      <span class="div-icon">📖</span>
+      <div class="div-line r"></div>
+    </div>
+
+    <p style="margin-top:1.2rem;font-size:0.82rem;color:var(--suave);letter-spacing:0.04em;">
+      <strong style="color:var(--texto);">Librería Rehilete</strong> · Sábado 7 de Marzo · 4:00 PM
+    </p>
+  </div>
+</section>
+
+<script>
+/* ── Elementos flotantes orgánicos ── */
+(function(){
+  const container=document.getElementById('floating-items');
+  const items=[
+    {src:'e.png',size:48,x:8,y:18,delay:0,dur:7},
+    {src:'f.png',size:42,x:78,y:10,delay:1.5,dur:9},
+    {src:'g.png',size:38,x:15,y:72,delay:0.7,dur:8},
+    {src:'e.png',size:32,x:88,y:60,delay:2.2,dur:10},
+    {src:'f.png',size:36,x:5,y:45,delay:3,dur:6.5},
+    {src:'g.png',size:44,x:92,y:30,delay:1,dur:11},
+    {src:'e.png',size:28,x:60,y:82,delay:2.5,dur:8.5},
+    {src:'f.png',size:34,x:35,y:5,delay:0.3,dur:9.5},
+  ];
+  items.forEach(item=>{
+    const el=document.createElement('img');
+    el.src=item.src;el.alt='';
+    el.style.cssText=`
+      position:absolute;
+      left:${item.x}%;top:${item.y}%;
+      width:${item.size}px;height:auto;
+      opacity:0.55;
+      filter:drop-shadow(0 4px 10px rgba(0,0,0,0.12));
+      animation:floatItem ${item.dur}s ${item.delay}s ease-in-out infinite;
+      transform-origin:center;
+    `;
+    container.appendChild(el);
+  });
+})();
+
+/* ── Countdown ── */
+const eventDate=new Date('2026-03-07T16:00:00');
+function updateCD(){
+  const diff=eventDate-new Date();
+  if(diff<=0){['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id=>document.getElementById(id).textContent='00');return;}
+  document.getElementById('cd-days').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cd-hours').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cd-mins').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cd-secs').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+updateCD();setInterval(updateCD,1000);
+
+/* ── Scroll Reveal ── */
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ── Burbujas de dino c ── */
+setTimeout(()=>{
+  const b=document.querySelector('.dino-c-bubble');
+  if(b){b.style.opacity='1';b.style.transform='none';}
+},1800);
+
+/* ── Música con explosión de confetti tipo piñata ── */
+const audioEl=document.getElementById('audio');
+const musicBtn=document.getElementById('music-btn');
+audioEl.volume=0.75;
+
+// Canvas dedicado al burst (separado del canvas de confetti de carga)
+const burstCanvas=document.createElement('canvas');
+burstCanvas.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+document.body.appendChild(burstCanvas);
+const bctx=burstCanvas.getContext('2d');
+function resizeBurst(){burstCanvas.width=window.innerWidth;burstCanvas.height=window.innerHeight;}
+resizeBurst();
+window.addEventListener('resize',resizeBurst);
+
+let burstParticles=[];
+let burstRAF=null;
+
+function burstConfettiAt(x,y){
+  const colors=['#2ABFBF','#E8366B','#E8A820','#7DC95E','#ffffff','#2D6A4F','#FF8FAB','#FFD166'];
+  const shapes=['rect','circle','strip'];
+  burstParticles=[];
+  // ráfaga tipo piñata: velocidades variadas, algunas hacia arriba, otras en abanico
+  for(let i=0;i<120;i++){
+    const ang=(Math.random()*Math.PI*2);
+    const speed=Math.random()*14+4;
+    burstParticles.push({
+      x, y,
+      vx: Math.cos(ang)*speed*(0.6+Math.random()*0.8),
+      vy: Math.sin(ang)*speed*(0.6+Math.random()*0.8) - (Math.random()*8+4), // sesgo hacia arriba
+      color: colors[Math.floor(Math.random()*colors.length)],
+      w: Math.random()*10+4,
+      h: Math.random()*5+3,
+      alpha: 1,
+      decay: Math.random()*0.012+0.008,
+      angle: Math.random()*Math.PI*2,
+      spin: (Math.random()-0.5)*0.22,
+      shape: shapes[Math.floor(Math.random()*shapes.length)],
+      gravity: 0.28+Math.random()*0.15,
+    });
+  }
+  if(burstRAF) cancelAnimationFrame(burstRAF);
+  animateBurst();
+}
+
+function animateBurst(){
+  bctx.clearRect(0,0,burstCanvas.width,burstCanvas.height);
+  let anyAlive=false;
+  for(const p of burstParticles){
+    if(p.alpha<=0) continue;
+    anyAlive=true;
+    p.x+=p.vx;
+    p.y+=p.vy;
+    p.vy+=p.gravity;      // gravedad
+    p.vx*=0.985;          // fricción leve
+    p.angle+=p.spin;
+    p.alpha-=p.decay;
+
+    bctx.save();
+    bctx.globalAlpha=Math.max(0,p.alpha);
+    bctx.fillStyle=p.color;
+    bctx.translate(p.x,p.y);
+    bctx.rotate(p.angle);
+    if(p.shape==='circle'){
+      bctx.beginPath();bctx.arc(0,0,p.w/2,0,Math.PI*2);bctx.fill();
+    } else if(p.shape==='strip'){
+      bctx.fillRect(-p.w/2,-p.h/4,p.w,p.h/2);
+    } else {
+      bctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+    }
+    bctx.restore();
+  }
+  if(anyAlive){
+    burstRAF=requestAnimationFrame(animateBurst);
+  } else {
+    bctx.clearRect(0,0,burstCanvas.width,burstCanvas.height);
+  }
+}
+
+function toggleMusic(){
+  const rect=musicBtn.getBoundingClientRect();
+  const bx=rect.left+rect.width/2;
+  const by=rect.top+rect.height/2;
+
+  musicBtn.classList.add('exploding');
+  setTimeout(()=>musicBtn.classList.remove('exploding'),400);
+
+  burstConfettiAt(bx,by);
+
+  if(audioEl.paused){
+    audioEl.play().catch(()=>{});
+    musicBtn.textContent='⏸ Pausar música 🦖✨';
+    musicBtn.classList.add('playing');
+  } else {
+    audioEl.pause();
+    musicBtn.textContent='Reproducir música 🦖✨';
+    musicBtn.classList.remove('playing');
+  }
+}
+(function(){
+  const canvas=document.getElementById('sparkle-canvas');
+  if(!canvas)return;
+  const wrap=canvas.parentElement;
+  function resize(){canvas.width=wrap.offsetWidth;canvas.height=wrap.offsetHeight;}
+  resize();
+  window.addEventListener('resize',resize);
+  const ctx=canvas.getContext('2d');
+  const sparkles=[];
+  const colors=['rgba(42,191,191,','rgba(232,168,32,','rgba(232,54,107,','rgba(125,201,94,','rgba(255,255,255,'];
+  for(let i=0;i<28;i++){
+    sparkles.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height,
+      r:Math.random()*2.5+0.8,
+      alpha:Math.random(),
+      alphaDir:Math.random()>0.5?1:-1,
+      alphaSpeed:Math.random()*0.025+0.01,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      vx:(Math.random()-0.5)*0.4,
+      vy:(Math.random()-0.5)*0.4,
+    });
+  }
+  function drawStar(cx,cy,r,a){
+    ctx.save();ctx.globalAlpha=a;
+    ctx.translate(cx,cy);
+    for(let i=0;i<4;i++){
+      ctx.rotate(Math.PI/4);
+      ctx.beginPath();
+      ctx.moveTo(0,-r*2.2);ctx.lineTo(0,r*2.2);
+      ctx.strokeStyle=sparkles[0].color+'0.6)';
+      ctx.lineWidth=0.8;ctx.stroke();
+    }
+    ctx.restore();
+  }
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    sparkles.forEach(s=>{
+      s.alpha+=s.alphaDir*s.alphaSpeed;
+      if(s.alpha>=1){s.alpha=1;s.alphaDir=-1;}
+      if(s.alpha<=0){s.alpha=0;s.alphaDir=1;s.x=Math.random()*canvas.width;s.y=Math.random()*canvas.height;}
+      s.x+=s.vx;s.y+=s.vy;
+      if(s.x<0||s.x>canvas.width)s.vx*=-1;
+      if(s.y<0||s.y>canvas.height)s.vy*=-1;
+      // glow
+      const g=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*5);
+      g.addColorStop(0,s.color+s.alpha+')');
+      g.addColorStop(1,s.color+'0)');
+      ctx.fillStyle=g;
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r*5,0,Math.PI*2);ctx.fill();
+      // core
+      ctx.save();ctx.globalAlpha=s.alpha;
+      ctx.fillStyle='#ffffff';
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+      // cross sparkle
+      ctx.strokeStyle='rgba(255,255,255,'+s.alpha*0.7+')';
+      ctx.lineWidth=0.7;
+      ctx.beginPath();ctx.moveTo(s.x-s.r*2.5,s.y);ctx.lineTo(s.x+s.r*2.5,s.y);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(s.x,s.y-s.r*2.5);ctx.lineTo(s.x,s.y+s.r*2.5);ctx.stroke();
+      ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── Estela de glitter al mover el cursor ── */
+(function(){
+  const c=document.createElement('canvas');
+  c.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:50;';
+  document.body.appendChild(c);
+  const ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;}
+  resize();
+  window.addEventListener('resize',resize);
+
+  const COLORS=['#2ABFBF','#E8366B','#E8A820','#7DC95E','#ffffff','#2D6A4F','#FFB3C6','#FFE566'];
+  const particles=[];
+  let mx=0,my=0,lastX=0,lastY=0;
+
+  window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+
+  function spawn(x,y){
+    const speed=Math.random()*1.2+0.3;
+    const ang=Math.random()*Math.PI*2;
+    const size=Math.random()*3.5+0.8;
+    particles.push({
+      x,y,
+      vx:Math.cos(ang)*speed,
+      vy:Math.sin(ang)*speed-Math.random()*0.8,
+      size,
+      color:COLORS[Math.floor(Math.random()*COLORS.length)],
+      alpha:Math.random()*0.55+0.45,
+      decay:Math.random()*0.018+0.010,
+      angle:Math.random()*Math.PI*2,
+      spin:(Math.random()-0.5)*0.12,
+      type:Math.random()>0.45?'star':'circle',
+    });
+  }
+
+  function drawStar(x,y,r,alpha,color,angle){
+    ctx.save();
+    ctx.globalAlpha=alpha;
+    ctx.strokeStyle=color;
+    ctx.lineWidth=r*0.7;
+    ctx.lineCap='round';
+    ctx.translate(x,y);
+    ctx.rotate(angle);
+    for(let i=0;i<2;i++){
+      ctx.beginPath();
+      ctx.moveTo(-r*2.4,0);ctx.lineTo(r*2.4,0);
+      ctx.stroke();
+      ctx.rotate(Math.PI/2);
+    }
+    const g=ctx.createRadialGradient(0,0,0,0,0,r*1.8);
+    g.addColorStop(0,color);
+    g.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=g;
+    ctx.beginPath();ctx.arc(0,0,r*1.8,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+
+  function loop(){
+    requestAnimationFrame(loop);
+    ctx.clearRect(0,0,c.width,c.height);
+
+    const dx=mx-lastX,dy=my-lastY;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist>3){
+      const count=Math.min(Math.floor(dist/6)+1,4);
+      for(let i=0;i<count;i++){
+        spawn(
+          lastX+dx*(i/count)+(Math.random()-0.5)*6,
+          lastY+dy*(i/count)+(Math.random()-0.5)*6
+        );
+      }
+      lastX=mx;lastY=my;
+    }
+
+    for(let i=particles.length-1;i>=0;i--){
+      const p=particles[i];
+      p.x+=p.vx;p.y+=p.vy;
+      p.vy+=0.018;
+      p.vx*=0.97;
+      p.alpha-=p.decay;
+      p.angle+=p.spin;
+      if(p.alpha<=0){particles.splice(i,1);continue;}
+      if(p.type==='star'){
+        drawStar(p.x,p.y,p.size,p.alpha,p.color,p.angle);
+      } else {
+        ctx.save();
+        ctx.globalAlpha=p.alpha;
+        const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size*2.2);
+        g.addColorStop(0,p.color);
+        g.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle=g;
+        ctx.beginPath();ctx.arc(p.x,p.y,p.size*2.2,0,Math.PI*2);ctx.fill();
+        ctx.globalAlpha=p.alpha*0.9;
+        ctx.fillStyle='#ffffff';
+        ctx.beginPath();ctx.arc(p.x,p.y,p.size*0.55,0,Math.PI*2);ctx.fill();
+        ctx.restore();
+      }
+    }
+  }
+  loop();
+})();
+
+
+(function(){
+  const canvas=document.getElementById('confetti-canvas');
+  const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+  window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+  
+  const colors=['#2ABFBF','#E8366B','#E8A820','#7DC95E','#2D6A4F','#ffffff'];
+  const shapes=[];
+  let active=true;
+  
+  class Particle{
+    constructor(){this.reset(true);}
+    reset(init){
+      this.x=Math.random()*canvas.width;
+      this.y=init?Math.random()*canvas.height*0.3:-20;
+      this.size=Math.random()*6+3;
+      this.color=colors[Math.floor(Math.random()*colors.length)];
+      this.vx=(Math.random()-0.5)*2.5;
+      this.vy=Math.random()*3+1.5;
+      this.va=(Math.random()-0.5)*0.15;
+      this.angle=Math.random()*Math.PI*2;
+      this.shape=Math.random()>0.5?'rect':'circle';
+      this.alpha=1;
+      this.decay=Math.random()*0.008+0.003;
+    }
+    update(){
+      this.x+=this.vx;this.y+=this.vy;
+      this.angle+=this.va;this.alpha-=this.decay;
+      if(this.alpha<=0||this.y>canvas.height+20)this.reset(false);
+    }
+    draw(){
+      ctx.save();ctx.globalAlpha=this.alpha;ctx.fillStyle=this.color;
+      ctx.translate(this.x,this.y);ctx.rotate(this.angle);
+      if(this.shape==='rect'){ctx.fillRect(-this.size/2,-this.size/4,this.size,this.size/2);}
+      else{ctx.beginPath();ctx.arc(0,0,this.size/2,0,Math.PI*2);ctx.fill();}
+      ctx.restore();
+    }
+  }
+  
+  for(let i=0;i<90;i++)shapes.push(new Particle());
+  
+  let frameCount=0;
+  function animate(){
+    if(!active){ctx.clearRect(0,0,canvas.width,canvas.height);return;}
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    shapes.forEach(p=>{p.update();p.draw();});
+    frameCount++;
+    if(frameCount>360){active=false;ctx.clearRect(0,0,canvas.width,canvas.height);return;}
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>
