@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚀 ¡Fiesta de Toy Story! 🚀</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Bangers&display=swap');
+
+  :root {
+    --woody-brown: #8B4513;
+    --buzz-purple: #4B0082;
+    --buzz-green: #228B22;
+    --sky-blue: #87CEEB;
+    --cloud-white: #fff;
+    --sun-yellow: #FFD700;
+    --rex-green: #2E8B57;
+    --andy-red: #CC2200;
+    --wallpaper-blue: #4169E1;
+    --wallpaper-yellow: #FFD700;
+    --dark-bg: #1a0a00;
+    --star-gold: #FFD700;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    overflow: hidden;
+    font-family: 'Bangers', cursive;
+    cursor: none;
+    letter-spacing: 1px;
+  }
+
+  /* ======= CUSTOM CURSOR ======= */
+  .cursor {
+    width: 32px; height: 32px;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    transition: transform 0.05s;
+  }
+
+  /* ======= SCREEN 1: CLICK TO START ======= */
+  #screen-start {
+    position: fixed; inset: 0;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: opacity 0.8s ease;
+    overflow: hidden;
+  }
+
+  /* Andy's wallpaper pattern on start screen */
+  .start-wallpaper {
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent, transparent 40px,
+        rgba(65,105,225,0.15) 40px, rgba(65,105,225,0.15) 80px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent, transparent 40px,
+        rgba(255,215,0,0.08) 40px, rgba(255,215,0,0.08) 80px
+      );
+    z-index: 0;
+  }
+
+  .start-logo {
+    font-size: clamp(28px, 6vw, 60px);
+    color: var(--sun-yellow);
+    text-shadow: 4px 4px 0 #8B4513, 0 0 30px #FFD700aa;
+    text-align: center;
+    line-height: 1.4;
+    letter-spacing: 4px;
+    animation: logoPulse 1.5s ease-in-out infinite;
+    margin-bottom: 10px;
+    position: relative; z-index: 2;
+  }
+
+  .start-sub {
+    font-size: clamp(12px, 2.5vw, 22px);
+    color: #fff;
+    text-shadow: 2px 2px 0 #333;
+    text-align: center;
+    margin-bottom: 50px;
+    animation: fadeInUp 1s ease both;
+    position: relative; z-index: 2;
+    font-family: 'Fredoka One', cursive;
+  }
+
+  .press-start-btn {
+    font-family: 'Bangers', cursive;
+    letter-spacing: 3px;
+    font-size: clamp(14px, 3vw, 24px);
+    color: #fff;
+    background: var(--andy-red);
+    border: 4px solid #fff;
+    padding: 18px 36px;
+    cursor: pointer;
+    animation: blinkBtn 0.9s step-end infinite;
+    text-transform: uppercase;
+    box-shadow: 6px 6px 0 #7a0000, 0 0 30px #CC2200aa;
+    transition: transform 0.1s, box-shadow 0.1s;
+    position: relative; z-index: 2;
+    border-radius: 8px;
+  }
+
+  .press-start-btn:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 10px 10px 0 #7a0000, 0 0 50px #CC2200cc;
+  }
+  .press-start-btn:active {
+    transform: scale(0.96) translateY(3px);
+    box-shadow: 2px 2px 0 #7a0000;
+  }
+
+  .start-toy-sprite {
+    font-size: 90px;
+    animation: floatBob 2s ease-in-out infinite;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 20px #FFD700aa);
+    position: relative; z-index: 2;
+  }
+
+  /* ======= TRANSITION TUNNEL ======= */
+  #screen-tunnel {
+    position: fixed; inset: 0;
+    background: linear-gradient(180deg, #87CEEB 0%, #B0E0FF 100%);
+    display: none;
+    z-index: 200;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .falling-toy {
+    font-size: 70px;
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: marioFall 0s linear both;
+    z-index: 20;
+    filter: drop-shadow(0 4px 8px #00000088);
+  }
+
+  .tunnel-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 6px solid transparent;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    animation: tunnelRingExpand var(--speed) linear infinite;
+    opacity: 0;
+  }
+
+  .warp-text {
+    font-size: clamp(14px, 3vw, 28px);
+    color: #fff;
+    text-shadow: 0 0 20px #4169E1, 0 0 40px #87CEEB;
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    animation: warpTextBlink 0.4s step-end infinite;
+    letter-spacing: 3px;
+    font-family: 'Bangers', cursive;
+  }
+
+  .speed-lines {
+    position: absolute; inset: 0;
+    background: repeating-conic-gradient(
+      from 0deg at 50% 50%,
+      #ffffff10 0deg, transparent 2deg,
+      transparent 10deg, #87CEEB18 12deg
+    );
+    animation: spinLines 0.5s linear infinite;
+  }
+
+  .falling-items {
+    position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+  }
+
+  .fall-item {
+    position: absolute;
+    font-size: clamp(16px, 3vw, 36px);
+    top: -60px;
+    animation: fallThrough var(--fdur) linear forwards;
+    opacity: 0.8;
+  }
+
+  /* ======= SCREEN 2: INVITATION ======= */
+  #screen-invite {
+    position: fixed; inset: 0;
+    background: var(--sky-blue);
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  /* Andy's room sky + wallpaper */
+  .sky-bg {
+    position: fixed; inset: 0;
+    background: linear-gradient(180deg, #87CEEB 0%, #B0D8FF 50%, #D4ECFF 100%);
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  /* Wallpaper pattern on invitation bg */
+  .wallpaper-pattern {
+    position: fixed; inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle, rgba(65,105,225,0.12) 2px, transparent 2px),
+      radial-gradient(circle, rgba(255,215,0,0.08) 2px, transparent 2px);
+    background-size: 40px 40px, 60px 60px;
+    background-position: 0 0, 20px 20px;
+  }
+
+  /* CLOUDS */
+  .cloud {
+    position: absolute;
+    background: #fff;
+    border-radius: 50px;
+    animation: cloudFloat var(--cspeed) linear infinite;
+    opacity: 0.85;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .cloud::before { width: 60%; height: 130%; top: -40%; left: 15%; }
+  .cloud::after  { width: 40%; height: 110%; top: -30%; right: 15%; }
+
+  /* GROUND — Andy's wooden floor */
+  .ground-layer {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: repeating-linear-gradient(
+      90deg,
+      #C4A265 0px, #C4A265 58px,
+      #A0825A 58px, #A0825A 62px,
+      #C4A265 62px, #C4A265 120px
+    );
+    z-index: 5;
+    border-top: 6px solid #8B6340;
+    box-shadow: inset 0 8px 0 #D4B278;
+  }
+
+  /* TOY BOX instead of pipes */
+  .toybox {
+    position: fixed;
+    bottom: 80px;
+    z-index: 6;
+    animation: pipeRise 1s cubic-bezier(0.2,1.5,0.5,1) both;
+    width: 80px;
+  }
+
+  .toybox-body {
+    height: 70px;
+    background: linear-gradient(135deg, #CC2200, #FF4422);
+    border: 4px solid #8B0000;
+    border-radius: 6px 6px 0 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+  }
+
+  .toybox-lid {
+    height: 20px;
+    background: linear-gradient(135deg, #FF6633, #CC2200);
+    border: 4px solid #8B0000;
+    border-radius: 8px 8px 0 0;
+    margin: 0 -6px;
+  }
+
+  /* CONTENT */
+  .invite-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 20px 160px;
+    gap: 30px;
+  }
+
+  /* TITLE CARD */
+  .title-card {
+    background: linear-gradient(135deg, #1a0a00 0%, #2d1a00 100%);
+    border: 8px solid var(--sun-yellow);
+    border-radius: 16px;
+    padding: 30px 40px;
+    text-align: center;
+    box-shadow: 0 0 0 4px #8B4513, 0 20px 60px #00000088, 0 0 80px #FFD70044;
+    position: relative;
+    overflow: hidden;
+    max-width: 700px;
+    width: 100%;
+    animation: cardSlideDown 0.8s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.2s;
+  }
+
+  .title-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent, transparent 20px,
+      rgba(255,215,0,0.03) 20px, rgba(255,215,0,0.03) 40px
+    );
+  }
+
+  .super-text {
+    font-size: clamp(10px, 2vw, 16px);
+    color: var(--sun-yellow);
+    letter-spacing: 8px;
+    text-shadow: 2px 2px 0 #7a5000;
+    animation: coinGlow 1.5s ease-in-out infinite alternate;
+    margin-bottom: 12px;
+  }
+
+  .party-title {
+    font-size: clamp(20px, 5vw, 48px);
+    color: var(--andy-red);
+    text-shadow: 4px 4px 0 #7a0000, 0 0 30px #CC220088;
+    line-height: 1.3;
+    margin-bottom: 10px;
+    animation: titlePop 0.6s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.5s;
+  }
+
+  .birthday-name {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(36px, 8vw, 80px);
+    background: linear-gradient(180deg, #FFD700 0%, #FF8C00 50%, #FFD700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(4px 4px 0 #7a5000);
+    animation: nameShine 2s ease-in-out infinite alternate, titlePop 0.6s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.7s, 0.7s;
+    line-height: 1.1;
+  }
+
+  .coins-row {
+    display: flex; gap: 12px; justify-content: center;
+    margin-top: 14px;
+  }
+
+  .coin-spin {
+    font-size: 28px;
+    animation: coinFlip 0.8s linear infinite;
+    animation-delay: var(--cd);
+    filter: drop-shadow(0 0 8px #FFD700aa);
+  }
+
+  /* INFO CARD */
+  .info-card {
+    background: linear-gradient(135deg, #CC2200 0%, #991800 100%);
+    border: 6px solid var(--sun-yellow);
+    border-radius: 14px;
+    padding: 28px 36px;
+    text-align: center;
+    box-shadow: 0 0 0 3px #7a0000, 0 16px 40px #00000066;
+    max-width: 700px; width: 100%;
+    animation: cardSlideUp 0.8s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .info-card::after {
+    content: '★★★';
+    position: absolute;
+    bottom: -8px; right: 20px;
+    font-size: 40px;
+    color: rgba(255,255,255,0.06);
+    letter-spacing: 6px;
+  }
+
+  .section-icon { font-size: 36px; margin-bottom: 8px; display: block; }
+
+  .info-label {
+    font-size: clamp(9px, 1.8vw, 13px);
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 4px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .info-value {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(20px, 4vw, 36px);
+    color: #fff;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.4);
+    margin-bottom: 18px;
+    line-height: 1.2;
+  }
+
+  .divider {
+    height: 4px;
+    background: repeating-linear-gradient(90deg, transparent 0, transparent 8px, rgba(255,255,255,0.3) 8px, rgba(255,255,255,0.3) 16px);
+    margin: 14px 0;
+    border-radius: 2px;
+  }
+
+  /* COSTUME CARD */
+  .costume-card {
+    background: linear-gradient(135deg, #1a3a8c 0%, #0a2060 100%);
+    border: 6px solid var(--sun-yellow);
+    border-radius: 14px;
+    padding: 28px 36px;
+    text-align: center;
+    box-shadow: 0 0 0 3px #050e30, 0 16px 40px #00000066;
+    max-width: 700px; width: 100%;
+    animation: cardSlideUp 0.8s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.6s;
+  }
+
+  .costume-title {
+    font-size: clamp(11px, 2vw, 18px);
+    color: var(--sun-yellow);
+    text-shadow: 2px 2px 0 #7a5000;
+    margin-bottom: 16px;
+    letter-spacing: 2px;
+  }
+
+  .costume-grid {
+    display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;
+  }
+
+  .costume-item {
+    background: rgba(255,255,255,0.12);
+    border: 3px solid rgba(255,255,255,0.25);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    transition: transform 0.2s, background 0.2s;
+    cursor: default;
+    min-width: 90px;
+  }
+  .costume-item:hover {
+    transform: translateY(-6px) scale(1.06);
+    background: rgba(255,255,255,0.22);
+  }
+
+  .costume-emoji { font-size: 36px; animation: float var(--fd) ease-in-out infinite; }
+
+  .costume-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(11px, 2vw, 15px);
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+  }
+
+  /* RSVP CARD */
+  .rsvp-card {
+    background: linear-gradient(135deg, #228B22 0%, #145214 100%);
+    border: 6px solid var(--sun-yellow);
+    border-radius: 14px;
+    padding: 28px 36px;
+    text-align: center;
+    box-shadow: 0 0 0 3px #0a2a0a, 0 16px 40px #00000066;
+    max-width: 700px; width: 100%;
+    animation: cardSlideUp 0.8s cubic-bezier(0.2,1.5,0.5,1) both;
+    animation-delay: 0.8s;
+  }
+
+  .rsvp-title {
+    font-size: clamp(11px, 2vw, 16px);
+    color: var(--sun-yellow);
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+    text-shadow: 2px 2px 0 #0a2a0a;
+  }
+
+  .phone-big {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(24px, 5vw, 46px);
+    color: #fff;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.4);
+    margin: 8px 0 16px;
+    letter-spacing: 3px;
+  }
+
+  .rsvp-note {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(13px, 2.5vw, 20px);
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+  }
+
+  .confirm-btn {
+    display: inline-block;
+    background: var(--sun-yellow);
+    color: #3a2000;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 2px;
+    font-size: clamp(11px, 2vw, 16px);
+    padding: 14px 28px;
+    border-radius: 8px;
+    border: 4px solid #c88000;
+    box-shadow: 4px 4px 0 #7a5000;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 16px;
+    transition: transform 0.1s, box-shadow 0.1s;
+    animation: btnPulse 1.5s ease-in-out infinite;
+  }
+  .confirm-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 6px 6px 0 #7a5000;
+  }
+
+  /* FLOATING ITEMS */
+  .floating-items {
+    position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
+  }
+
+  .float-mushroom {
+    position: absolute;
+    font-size: clamp(20px, 3vw, 36px);
+    animation: floatRandom var(--dur) ease-in-out infinite;
+    opacity: 0.7;
+  }
+
+  /* QUESTION BLOCKS — replaced with star boxes */
+  .q-block {
+    position: fixed;
+    bottom: 80px;
+    width: 60px; height: 60px;
+    background: var(--sun-yellow);
+    border: 4px solid #c88000;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: #7a5000;
+    font-family: 'Bangers', cursive;
+    box-shadow: inset 0 -6px 0 #c88000, 0 8px 0 #7a5000;
+    cursor: pointer;
+    z-index: 7;
+    transition: transform 0.1s;
+    animation: blockBounce var(--bb) ease-in-out infinite;
+  }
+  .q-block:hover { transform: translateY(-4px); }
+  .q-block:active { transform: translateY(2px); }
+
+  .coin-pop {
+    position: fixed;
+    font-size: 28px;
+    z-index: 100;
+    pointer-events: none;
+    animation: coinPopAnim 0.7s ease-out forwards;
+  }
+
+  /* BOTTOM CHARACTERS */
+  .bottom-chars {
+    position: fixed;
+    bottom: 80px;
+    left: 0; right: 0;
+    display: flex; justify-content: center; gap: 30px;
+    z-index: 8;
+    pointer-events: none;
+  }
+
+  .char-run {
+    font-size: clamp(30px, 5vw, 55px);
+    animation: charRun var(--cr) ease-in-out infinite;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+  }
+
+  /* FIREWORKS */
+  .firework {
+    position: fixed;
+    pointer-events: none;
+    z-index: 300;
+  }
+
+  .fw-particle {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    animation: fwParticle var(--fwt) ease-out forwards;
+  }
+
+  /* ======= SCORE BAR ======= */
+  .score-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: linear-gradient(90deg, #1a0a00, #2d1a00);
+    padding: 10px 24px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 20;
+    border-bottom: 4px solid var(--sun-yellow);
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .score-item { text-align: center; }
+
+  .score-label {
+    font-size: clamp(6px, 1.2vw, 9px);
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+    font-family: 'Bangers', cursive;
+  }
+  .score-value {
+    font-size: clamp(10px, 1.8vw, 14px);
+    color: var(--sun-yellow);
+    text-shadow: 2px 2px 0 #7a5000;
+    font-family: 'Bangers', cursive;
+  }
+
+  /* TIMER */
+  .party-timer {
+    position: fixed;
+    top: 60px; right: 20px;
+    background: rgba(0,0,0,0.85);
+    border: 3px solid var(--sun-yellow);
+    border-radius: 10px;
+    padding: 12px 16px;
+    z-index: 20;
+    text-align: center;
+    display: none;
+    box-shadow: 0 0 20px #FFD70044;
+  }
+
+  .timer-label {
+    font-size: clamp(7px, 1.2vw, 10px);
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+    font-family: 'Bangers', cursive;
+  }
+  .timer-value {
+    font-size: clamp(18px, 3vw, 26px);
+    color: var(--andy-red);
+    text-shadow: 2px 2px 0 #7a0000;
+    font-family: 'Bangers', cursive;
+  }
+
+  /* MODAL POPUP */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-box {
+    background: linear-gradient(135deg, #1a0a00, #2d1a00);
+    border: 8px solid var(--sun-yellow);
+    border-radius: 20px;
+    padding: 36px 48px;
+    text-align: center;
+    max-width: 500px; width: 90%;
+    box-shadow: 0 0 0 4px #8B4513, 0 30px 80px #000;
+    animation: modalPop 0.5s cubic-bezier(0.2,1.5,0.5,1) both;
+  }
+  .modal-title {
+    font-size: clamp(16px, 3vw, 24px);
+    color: var(--sun-yellow);
+    margin-bottom: 16px;
+    text-shadow: 3px 3px 0 #7a5000;
+  }
+  .modal-body {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(16px, 3vw, 24px);
+    color: #fff;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .modal-close {
+    font-family: 'Bangers', cursive;
+    letter-spacing: 2px;
+    font-size: clamp(12px, 2vw, 16px);
+    background: var(--andy-red);
+    color: #fff;
+    border: 3px solid #7a0000;
+    padding: 12px 24px;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 3px 3px 0 #7a0000;
+    transition: transform 0.1s;
+  }
+  .modal-close:hover { transform: scale(1.05); }
+
+  /* ======= KEYFRAMES ======= */
+  @keyframes logoPulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+  @keyframes blinkBtn {
+    0%,49% { opacity: 1; } 50%,100% { opacity: 0; }
+  }
+  @keyframes floatBob {
+    0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); }
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes tunnelRingExpand {
+    0%   { width: 30px; height: 30px; opacity: 0.9; }
+    100% { width: 200vmax; height: 200vmax; opacity: 0; }
+  }
+  @keyframes fallThrough {
+    0%   { top: -80px; opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { top: 110vh; opacity: 0; }
+  }
+  @keyframes spinLines {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes warpTextBlink {
+    0%,49% { opacity: 1; }
+    50%,100% { opacity: 0; }
+  }
+  @keyframes cloudFloat {
+    from { transform: translateX(-200px); }
+    to   { transform: translateX(calc(100vw + 200px)); }
+  }
+  @keyframes coinGlow {
+    from { text-shadow: 2px 2px 0 #7a5000, 0 0 10px #FFD700; }
+    to   { text-shadow: 2px 2px 0 #7a5000, 0 0 30px #FFD700; }
+  }
+  @keyframes titlePop {
+    from { transform: scale(0.3); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  @keyframes nameShine {
+    from { filter: drop-shadow(4px 4px 0 #7a5000) brightness(1);   }
+    to   { filter: drop-shadow(4px 4px 0 #7a5000) brightness(1.3); }
+  }
+  @keyframes coinFlip {
+    0%   { transform: scaleX(1); }
+    25%  { transform: scaleX(0.2); }
+    50%  { transform: scaleX(1); }
+    75%  { transform: scaleX(0.2); }
+    100% { transform: scaleX(1); }
+  }
+  @keyframes cardSlideDown {
+    from { transform: translateY(-60px) scale(0.9); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  @keyframes cardSlideUp {
+    from { transform: translateY(60px) scale(0.9); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  @keyframes pipeRise {
+    from { transform: translateY(200px); }
+    to   { transform: translateY(0); }
+  }
+  @keyframes floatRandom {
+    0%,100% { transform: translateY(0) rotate(-5deg); }
+    50%      { transform: translateY(-20px) rotate(5deg); }
+  }
+  @keyframes charRun {
+    0%,100% { transform: scaleX(1) translateY(0); }
+    25%      { transform: scaleX(1) translateY(-12px); }
+    50%      { transform: scaleX(1) translateY(0); }
+    75%      { transform: scaleX(1) translateY(-8px); }
+  }
+  @keyframes blockBounce {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+  @keyframes coinPopAnim {
+    0%   { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-80px) scale(1.5); opacity: 0; }
+  }
+  @keyframes fwParticle {
+    0%   { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--fx), var(--fy)) scale(0); opacity: 0; }
+  }
+  @keyframes modalPop {
+    from { transform: scale(0.5) rotate(-5deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+  }
+  @keyframes btnPulse {
+    0%,100% { box-shadow: 4px 4px 0 #7a5000, 0 0 0 transparent; }
+    50%      { box-shadow: 4px 4px 0 #7a5000, 0 0 20px #FFD700aa; }
+  }
+  @keyframes marioFall {
+    from { top: -120px; }
+    to   { top: 110vh; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MÚSICA -->
+<audio id="musicaFondo" src="a.mp3" loop></audio>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor">🚀</div>
+
+<!-- ======= SCREEN 1: START ======= -->
+<div id="screen-start">
+  <div class="start-wallpaper"></div>
+  <div class="start-toy-sprite" id="startToy">🤠</div>
+  <div class="start-logo">TOY STORY<br>PARTY!</div>
+  <div class="start-sub">¡Hay un amigo en ti! 🎵</div>
+  <button class="press-start-btn" onclick="startTransition()">
+    🚀 ¡TOCA PARA JUGAR!
+  </button>
+</div>
+
+<!-- ======= SCREEN 2: TUNNEL TRANSITION ======= -->
+<div id="screen-tunnel">
+  <div class="speed-lines"></div>
+  <div class="falling-items" id="fallingItems"></div>
+  <div id="tunnelRings"></div>
+  <div class="falling-toy" id="fallingMario">🚀</div>
+  <div class="warp-text" id="warpText">¡AL INFINITO Y MÁS ALLÁ! 🚀</div>
+</div>
+
+<!-- ======= SCREEN 3: INVITATION ======= -->
+<div id="screen-invite">
+  <div class="sky-bg" id="skyBg"></div>
+  <div class="wallpaper-pattern"></div>
+  <div class="floating-items" id="floatingItems"></div>
+
+  <!-- Score Bar -->
+  <div class="score-bar" id="scoreBar">
+    <div class="score-item">
+      <div class="score-label">WOODY</div>
+      <div class="score-value" id="scoreVal">000000</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">🤠 VIDAS</div>
+      <div class="score-value">× 3</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">🚀 MISIÓN</div>
+      <div class="score-value">1 - 1</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">⭐ ESTRELLAS</div>
+      <div class="score-value" id="coinsVal">00</div>
+    </div>
+    <div class="score-item">
+      <div class="score-label">⏱ TIEMPO</div>
+      <div class="score-value" id="timeVal">400</div>
+    </div>
+  </div>
+
+  <!-- Party Timer -->
+  <div class="party-timer" id="partyTimer">
+    <div class="timer-label">FIESTA EN</div>
+    <div class="timer-value" id="countdown">🎉</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="invite-content" id="inviteContent" style="padding-top: 80px;">
+
+    <!-- TITLE CARD -->
+    <div class="title-card">
+      <div class="super-text">✦ MISIÓN: FIESTA ESPECIAL ✦</div>
+      <div class="party-title">¡BIENVENIDO A LA<br>GRAN FIESTA DE!</div>
+      <div class="birthday-name">Sebastián</div>
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(16px,3vw,28px); color:rgba(255,255,255,0.85); margin-top:8px; text-shadow: 2px 2px 0 rgba(0,0,0,0.5);">¡Cumple 6 años! 🎂</div>
+      <div class="coins-row">
+        <span class="coin-spin" style="--cd:0s">🤠</span>
+        <span class="coin-spin" style="--cd:0.1s">🚀</span>
+        <span class="coin-spin" style="--cd:0.2s">⭐</span>
+        <span class="coin-spin" style="--cd:0.3s">🎸</span>
+        <span class="coin-spin" style="--cd:0.4s">⭐</span>
+        <span class="coin-spin" style="--cd:0.5s">🚀</span>
+        <span class="coin-spin" style="--cd:0.6s">🤠</span>
+      </div>
+    </div>
+
+    <!-- DATE & TIME CARD -->
+    <div class="info-card">
+      <span class="section-icon">📅</span>
+      <div class="info-label">MISIÓN: FECHA</div>
+      <div class="info-value">Sábado 19 de Diciembre, 2026</div>
+      <div class="divider"></div>
+      <span class="section-icon">⏰</span>
+      <div class="info-label">MISIÓN: HORA</div>
+      <div class="info-value">4:00 PM – 8:00 PM</div>
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(12px,2vw,18px); color:rgba(255,255,255,0.8); margin-top:4px;">
+        ¡No llegues tarde o Lotso se roba el pastel! 🧸🎂
+      </div>
+    </div>
+
+    <!-- LOCATION CARD -->
+    <div class="info-card" style="background:linear-gradient(135deg,#4B3420,#2d1a00);">
+      <span class="section-icon">📍</span>
+      <div class="info-label">MISIÓN: UBICACIÓN</div>
+      <div class="info-value">Salón "El Cuarto de Andy"</div>
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,22px); color:rgba(255,255,255,0.85); margin-bottom:12px; line-height:1.5;">
+        Calle Sunnyside #42<br>Col. Caterpillar Room, CDMX
+      </div>
+      <div class="divider"></div>
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(12px,2vw,18px); color:var(--sun-yellow); text-shadow:1px 1px 0 rgba(0,0,0,0.5);">
+        🗺️ (A solo 2 bloques de la casa de Andy 🏠)
+      </div>
+    </div>
+
+    <!-- COSTUME CARD -->
+    <div class="costume-card">
+      <div class="costume-title">🎭 DISFRAZ — ¡VEN COMO TU JUGUETE FAVORITO!</div>
+      <div class="costume-grid">
+
+        <div class="costume-item">
+          <img src="woody.png" alt="Woody" class="costume-emoji" style="--fd:2.1s; width: 50px; height: auto;">
+          <span class="costume-label">Woody</span>
+        </div>
+        <div class="costume-item">
+          <img src="buzz.png" alt="Buzz" class="costume-emoji" style="--fd:2.4s; width: 50px; height: auto;">
+          <span class="costume-label">Buzz</span>
+        </div>
+        <div class="costume-item">
+          <img src="jessie.png" alt="Jessie" class="costume-emoji" style="--fd:1.8s; width: 50px; height: auto;">
+          <span class="costume-label">Jessie</span>
+        </div>
+        <div class="costume-item">
+          <img src="rex.png" alt="Rex" class="costume-emoji" style="--fd:2.7s; width: 50px; height: auto;">
+          <span class="costume-label">Rex</span>
+        </div>
+        <div class="costume-item">
+          <img src="hamm.png" alt="Hamm" class="costume-emoji" style="--fd:2.2s; width: 50px; height: auto;">
+          <span class="costume-label">Hamm</span>
+        </div>
+        <div class="costume-item">
+          <img src="slinky.png" alt="Slinky" class="costume-emoji" style="--fd:1.9s; width: 50px; height: auto;">
+          <span class="costume-label">Slinky</span>
+        </div>
+        <div class="costume-item">
+          <img src="forky.png" alt="Forky" class="costume-emoji" style="--fd:2.0s; width: 50px; height: auto;">
+          <span class="costume-label">Forky</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ACTIVITIES CARD -->
+    <div class="info-card" style="background:linear-gradient(135deg,#4B0082,#2d0050);">
+      <span class="section-icon">🎮</span>
+      <div class="info-label">MISIÓN: ACTIVIDADES</div>
+      <div style="display:flex; flex-direction:column; gap:12px; text-align:left; margin-top:8px;">
+        <div style="display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.1); border-radius:10px; padding:12px 16px;">
+          <span style="font-size:28px;">🎯</span>
+          <span style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,20px); color:#fff;">Rescate de Juguetes (Juego)</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.1); border-radius:10px; padding:12px 16px;">
+          <span style="font-size:28px;">🧸</span>
+          <span style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,20px); color:#fff;">Piñata Gigante de Lotso</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.1); border-radius:10px; padding:12px 16px;">
+          <span style="font-size:28px;">🎂</span>
+          <span style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,20px); color:#fff;">Pastel temático + Sorpresas</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.1); border-radius:10px; padding:12px 16px;">
+          <span style="font-size:28px;">📸</span>
+          <span style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,20px); color:#fff;">Foto con Woody & Buzz</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; background:rgba(255,255,255,0.1); border-radius:10px; padding:12px 16px;">
+          <span style="font-size:28px;">🎁</span>
+          <span style="font-family:'Fredoka One',cursive; font-size:clamp(14px,2.5vw,20px); color:#fff;">¡Bolsas mágicas de regalo!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RSVP CARD -->
+    <div class="rsvp-card">
+      <span class="section-icon">📞</span>
+      <div class="rsvp-title">CONFIRMACIÓN DE ASISTENCIA</div>
+      <div class="phone-big">📱 55 1234 5678</div>
+      <div class="rsvp-note">
+        Confirma antes del<br>
+        <strong>12 de Diciembre</strong><br>
+        ¡Tu misión es no faltar! 🚀
+      </div>
+      <br>
+      <a href="https://wa.me/5512345678?text=¡Confirmo%20asistencia%20a%20la%20fiesta%20de%20Sebastián!" class="confirm-btn" target="_blank">
+        💬 CONFIRMAR VÍA WHATSAPP
+      </a>
+    </div>
+
+    <!-- FINAL NOTE -->
+    <div class="title-card" style="padding:20px 30px;">
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(16px,3vw,26px); color:var(--sun-yellow); margin-bottom:10px; text-shadow:2px 2px 0 #7a5000;">
+        ¡Recuerda!
+      </div>
+      <div style="font-family:'Fredoka One',cursive; font-size:clamp(13px,2.5vw,20px); color:rgba(255,255,255,0.9); line-height:1.7;">
+        Cada invitado recibirá<br>
+        <span style="color:var(--sun-yellow);">⭐ Una estrella de la amistad ⭐</span><br>
+        al entrar al salón 🎉<br><br>
+        <span style="font-size:clamp(10px,2vw,16px); color:rgba(255,255,255,0.65);">
+          Con ❤️ de la familia García López
+        </span>
+      </div>
+      <div style="margin-top:14px; font-size:clamp(24px,5vw,48px);">
+        🤠🚀⭐🎸🤠🚀⭐🎸
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Ground and Toy Boxes -->
+  <div class="ground-layer"></div>
+  <div class="toybox" style="right:60px;">
+    <div class="toybox-lid"></div>
+    <div class="toybox-body">🧸</div>
+  </div>
+  <div class="toybox" style="left:60px; animation-delay:0.2s;">
+    <div class="toybox-lid"></div>
+    <div class="toybox-body">🚀</div>
+  </div>
+
+  <!-- Star Blocks -->
+  <div class="q-block" style="left:50%; transform:translateX(-50%); --bb:2.1s;" onclick="hitBlock(this)">⭐</div>
+  <div class="q-block" style="left:calc(50% + 100px); --bb:1.7s;" onclick="hitBlock(this)">⭐</div>
+  <div class="q-block" style="left:calc(50% - 100px); --bb:2.5s;" onclick="hitBlock(this)">⭐</div>
+
+  <!-- Running Characters -->
+  <div class="bottom-chars">
+    <span class="char-run" style="--cr:0.5s; font-size:50px;">🤠</span>
+    <span class="char-run" style="--cr:0.55s; animation-delay:0.2s; font-size:50px;">🚀</span>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title">⭐ ¡BLOQUE MÁGICO!</div>
+    <div class="modal-body" id="modalBody">¡Encontraste una sorpresa!</div>
+    <button class="modal-close" onclick="closeModal()">✓ ¡ENTENDIDO!</button>
+  </div>
+</div>
+
+<script>
+  // ======= CURSOR =======
+  const cursor = document.getElementById('cursor');
+  const cursors = ['🚀','🤠','⭐','🎸','🧸','🚀'];
+  let ci = 0;
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  setInterval(() => {
+    ci = (ci+1) % cursors.length;
+    cursor.textContent = cursors[ci];
+  }, 800);
+
+  // ======= STAR FIELD =======
+  const sf = document.getElementById('screen-start');
+  for(let i=0; i<80; i++){
+    const s = document.createElement('div');
+    s.style.cssText = `position:absolute;left:${Math.random()*100}%;top:${Math.random()*100}%;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;background:#fff;border-radius:50%;animation:twinkle ${(Math.random()*2+1).toFixed(2)}s ease-in-out infinite;animation-delay:${(Math.random()*3).toFixed(2)}s;opacity:0;z-index:1;`;
+    sf.appendChild(s);
+  }
+
+  // Change start sprite cyclically
+  const sprites = ['🤠','🚀','⭐','🧸','🎸','🎂','🏆'];
+  let si = 0;
+  const startToy = document.getElementById('startToy');
+  setInterval(() => {
+    si = (si+1) % sprites.length;
+    startToy.style.transform = 'scale(0)';
+    setTimeout(() => {
+      startToy.textContent = sprites[si];
+      startToy.style.transform = 'scale(1)';
+      startToy.style.transition = 'transform 0.3s cubic-bezier(0.2,1.5,0.5,1)';
+    }, 200);
+  }, 1500);
+
+  // ======= TRANSITION =======
+  let juegoIniciado = false;
+
+  function startTransition(){
+    if (juegoIniciado) return;
+    juegoIniciado = true;
+    document.getElementById('musicaFondo').play();
+
+    const ss = document.getElementById('screen-start');
+    const st = document.getElementById('screen-tunnel');
+
+    ss.style.opacity = '0';
+    setTimeout(() => {
+      ss.style.display = 'none';
+      st.style.display = 'flex';
+
+      const rings = document.getElementById('tunnelRings');
+      const colors = ['#FFD700','#87CEEB','#CC2200','#228B22','#4B0082','#FF8C00','#fff'];
+      for(let i=0; i<10; i++){
+        const r = document.createElement('div');
+        r.className = 'tunnel-ring';
+        r.style.cssText = `border-color:${colors[i%colors.length]};--speed:${(0.8 + i*0.15).toFixed(2)}s;animation-delay:${(i*0.1).toFixed(2)}s`;
+        rings.appendChild(r);
+      }
+
+      const items = ['🤠','🚀','⭐','🧸','🎸','🐊','🎮','🏆','🎂','🌟','🔮','💥'];
+      const fi = document.getElementById('fallingItems');
+      for(let i=0; i<15; i++){
+        const it = document.createElement('div');
+        it.className = 'fall-item';
+        it.textContent = items[Math.floor(Math.random()*items.length)];
+        it.style.cssText = `left:${Math.random()*100}%;--fdur:${(1.5 + Math.random()*2.5).toFixed(2)}s;animation-delay:${(Math.random()*3).toFixed(2)}s;font-size:${Math.floor(16 + Math.random()*30)}px`;
+        fi.appendChild(it);
+      }
+
+      const fm = document.getElementById('fallingMario');
+      fm.style.animation = 'none';
+      fm.style.top = '-120px';
+      setTimeout(() => {
+        fm.style.transition = 'top 3s cubic-bezier(0.4,0,0.8,1)';
+        fm.style.top = '110vh';
+      }, 100);
+
+      const warps = [
+        '¡AL INFINITO Y MÁS ALLÁ! 🚀',
+        '¡ACTIVANDO MODO JUGUETE!',
+        '¡WOODY AL RESCATE! 🤠',
+        '¡BUZZ LIGHTYEAR EN CAMINO!',
+        '¡CASI LLEGAMOS AL CUARTO DE ANDY!',
+        '★★★ ¡FIESTA CARGADA! ★★★'
+      ];
+      let wi = 0;
+      const wt = document.getElementById('warpText');
+      const warpInterval = setInterval(() => {
+        wi++;
+        if(wi < warps.length){
+          wt.style.opacity = '0';
+          setTimeout(() => {
+            wt.textContent = warps[wi];
+            wt.style.opacity = '1';
+          }, 200);
+        } else {
+          clearInterval(warpInterval);
+        }
+      }, 700);
+
+      setTimeout(showInvitation, 4500);
+    }, 800);
+  }
+
+  function showInvitation(){
+    const st = document.getElementById('screen-tunnel');
+    const si = document.getElementById('screen-invite');
+    const sb = document.getElementById('scoreBar');
+    const pt = document.getElementById('partyTimer');
+
+    st.style.opacity = '0';
+    setTimeout(() => {
+      st.style.display = 'none';
+      si.style.display = 'flex';
+      sb.style.display = 'flex';
+      pt.style.display = 'block';
+      setTimeout(() => { si.style.opacity = '1'; }, 50);
+
+      buildSky();
+      buildFloating();
+      startScoreCount();
+      startPartyTimer();
+      startFireworks();
+    }, 500);
+  }
+
+  function buildSky(){
+    const sky = document.getElementById('skyBg');
+    const clouds = [
+      {w:160,h:50,t:8,d:22},{w:220,h:60,t:15,d:35},{w:140,h:45,t:25,d:18},
+      {w:190,h:55,t:5,d:28},{w:170,h:48,t:35,d:25},{w:200,h:58,t:18,d:40},
+    ];
+    clouds.forEach((c,i) => {
+      const cl = document.createElement('div');
+      cl.className = 'cloud';
+      cl.style.cssText = `width:${c.w}px;height:${c.h}px;top:${c.t}%;--cspeed:${c.d}s;left:${-c.w-20}px;animation-delay:${i*4}s`;
+      sky.appendChild(cl);
+    });
+  }
+
+  function buildFloating(){
+    const fi = document.getElementById('floatingItems');
+    const items = [
+      {e:'🤠',x:5,y:20,d:3.1},{e:'🚀',x:85,y:15,d:2.8},{e:'⭐',x:15,y:50,d:3.5},
+      {e:'🧸',x:80,y:45,d:2.5},{e:'🎸',x:50,y:10,d:3.8},{e:'🤠',x:60,y:60,d:2.2},
+      {e:'🚀',x:30,y:30,d:4.1},{e:'⭐',x:92,y:70,d:2.9},{e:'🧸',x:8,y:75,d:3.3},
+      {e:'🏆',x:70,y:25,d:2.6},{e:'🎸',x:42,y:80,d:3.7},{e:'🌟',x:55,y:35,d:2.4},
+    ];
+    items.forEach((it,i) => {
+      const el = document.createElement('div');
+      el.className = 'float-mushroom';
+      el.textContent = it.e;
+      el.style.cssText = `left:${it.x}%;top:${it.y}%;--dur:${it.d}s;animation-delay:${(i*0.4).toFixed(1)}s;font-size:${Math.floor(20+Math.random()*20)}px`;
+      fi.appendChild(el);
+    });
+  }
+
+  function startScoreCount(){
+    let score = 0;
+    let stars = 0;
+    setInterval(() => {
+      score += Math.floor(Math.random()*150 + 50);
+      stars = Math.min(99, stars + (Math.random() < 0.1 ? 1 : 0));
+      document.getElementById('scoreVal').textContent = String(score).padStart(6,'0');
+      document.getElementById('coinsVal').textContent = String(stars).padStart(2,'0');
+    }, 300);
+    let time = 400;
+    setInterval(() => {
+      if(time > 0) time--;
+      document.getElementById('timeVal').textContent = String(time).padStart(3,'0');
+    }, 1000);
+  }
+
+  function startPartyTimer(){
+    const partyDate = new Date('2026-12-19T16:00:00');
+    function updateTimer(){
+      const now = new Date();
+      const diff = partyDate - now;
+      if(diff <= 0){ document.getElementById('countdown').textContent = '¡HOY! 🎉'; return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      document.getElementById('countdown').textContent = `${d}d ${h}h ${m}m`;
+    }
+    updateTimer();
+    setInterval(updateTimer, 60000);
+  }
+
+  const blockMessages = [
+    {icon:'⭐', msg:'¡ESTRELLA DE LA AMISTAD!\n¡Woody dice: "Hay un amigo en ti!"\n¡No te pierdas la fiesta!'},
+    {icon:'🚀', msg:'¡MODO ESPACIAL ACTIVADO!\n¡Buzz dice: "Al infinito!"\n¡La fiesta te espera!'},
+    {icon:'🤠', msg:'¡SHERIFF EN LA CIUDAD!\n¡Una vida extra de diversión!\n¡Confirma tu asistencia!'},
+    {icon:'🧸', msg:'¡ABRAZO DE OSO!\n¡Los juguetes te esperan!\n¡Sebastián te invita!'},
+    {icon:'🎸', msg:'¡NOTA MUSICAL!\n¡Premio secreto en la fiesta!\n¡No faltes!'},
+    {icon:'🏆', msg:'¡TROFEO DORADO!\n¡Eres el juguete #1!\n¡Te vemos el 19 de Diciembre!'},
+  ];
+  let blockIdx = 0;
+
+  function hitBlock(el){
+    el.style.transform = 'translateY(-20px)';
+    el.style.background = '#888';
+    el.style.cursor = 'default';
+    el.style.animation = 'none';
+    el.onclick = null;
+
+    const msg = blockMessages[blockIdx % blockMessages.length];
+    blockIdx++;
+
+    const rect = el.getBoundingClientRect();
+    const pop = document.createElement('div');
+    pop.className = 'coin-pop';
+    pop.textContent = msg.icon;
+    pop.style.cssText = `left:${rect.left + rect.width/2 - 14}px;top:${rect.top - 30}px`;
+    document.body.appendChild(pop);
+    setTimeout(() => pop.remove(), 800);
+
+    document.getElementById('modalBody').innerHTML = msg.msg.replace(/\n/g,'<br>');
+    document.getElementById('modal').style.display = 'flex';
+    spawnFirework(rect.left + rect.width/2, rect.top);
+    setTimeout(() => { el.style.transform = ''; }, 200);
+  }
+
+  function closeModal(){
+    document.getElementById('modal').style.display = 'none';
+  }
+
+  function spawnFirework(x, y){
+    const colors = ['#FFD700','#CC2200','#228B22','#4B0082','#87CEEB','#FF8C00','#fff'];
+    const fw = document.createElement('div');
+    fw.className = 'firework';
+    fw.style.cssText = `left:${x}px;top:${y}px`;
+    document.body.appendChild(fw);
+    for(let i=0; i<16; i++){
+      const angle = (i / 16) * 360;
+      const dist = 60 + Math.random() * 80;
+      const rad = (angle * Math.PI) / 180;
+      const fx = Math.cos(rad) * dist;
+      const fy = Math.sin(rad) * dist;
+      const p = document.createElement('div');
+      p.className = 'fw-particle';
+      p.style.cssText = `background:${colors[Math.floor(Math.random()*colors.length)]};--fx:${fx}px;--fy:${fy}px;--fwt:${(0.5+Math.random()*0.5).toFixed(2)}s;animation-delay:${(Math.random()*0.1).toFixed(2)}s`;
+      fw.appendChild(p);
+    }
+    setTimeout(() => fw.remove(), 1200);
+  }
+
+  function startFireworks(){
+    setTimeout(() => {
+      for(let i=0; i<5; i++){
+        setTimeout(() => {
+          spawnFirework(Math.random() * window.innerWidth, Math.random() * window.innerHeight * 0.6);
+        }, i * 300);
+      }
+    }, 500);
+    setInterval(() => {
+      if(Math.random() < 0.4){
+        spawnFirework(Math.random() * window.innerWidth, Math.random() * window.innerHeight * 0.7);
+      }
+    }, 2000);
+  }
+
+  document.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    cursor.style.left = t.clientX + 'px';
+    cursor.style.top = t.clientY + 'px';
+  });
+</script>
+</body>
+</html>
