@@ -470,8 +470,9 @@
 
   <div class="portfolio-grid">
     <!-- Bodas -->
-    <div class="card">
-      <div class="card-img">
+    <div class="card"
+     onclick="window.location.href='2_boda/boda.html'"
+     style="cursor:pointer;">      <div class="card-img">
         <img src="imagenes_index/a.jpg" alt="Invitación de Boda">
       </div>
       <div class="card-body">
@@ -485,8 +486,9 @@
     </div>
 
     <!-- XV Años -->
-    <div class="card">
-      <div class="card-img">
+    <div class="card"
+     onclick="location.href='5_xv/xv.html'"
+     style="cursor:pointer;">      <div class="card-img">
         <img src="imagenes_index/b.jpg" alt="Invitación XV Años">
       </div>
       <div class="card-body">
@@ -500,8 +502,9 @@
     </div>
 
     <!-- Bautizos -->
-    <div class="card">
-      <div class="card-img">
+    <div class="card"
+     onclick="location.href='1_bautizo/bautizo.html'"
+     style="cursor:pointer;">      <div class="card-img">
         <img src="imagenes_index/c.jpg" alt="Invitación de Bautizo">
       </div>
       <div class="card-body">
@@ -515,7 +518,9 @@
     </div>
 
     <!-- Cumpleaños Infantil -->
-    <div class="card">
+    <div class="card"
+     onclick="location.href='3_cumple/cumple.html'"
+     style="cursor:pointer;">
       <div class="card-img">
         <img src="imagenes_index/d.jpg" alt="Cumpleaños Infantil">
       </div>
@@ -530,8 +535,10 @@
     </div>
 
     <!-- Graduación -->
-    <div class="card">
-      <div class="card-img">
+    <div class="card"
+     onclick="location.href='4_graduacion/graduacion.html'"
+     style="cursor:pointer;">
+    <div class="card-img">
         <img src="imagenes_index/e.png" alt="Invitación de Graduación">
       </div>
       <div class="card-body">
@@ -565,11 +572,13 @@
       </div>
       <p class="step-num">Paso 01</p>
       <p class="step-name">Envía tus Datos</p>
-      <p class="step-desc">Llena el formulario con nombres, fecha, hora y detalles del evento.</p>
+      <p class="step-desc">Completa el formulario con los detalles de tu evento para comenzar el diseño de tu invitación.</p>
+      <p class="step-desc">Da clic aquí para ir al formulario</p>
+
     </div>
 
     <!-- Paso 2 -->
-    <div class="step" style="cursor:pointer;" onclick="document.getElementById('precios').scrollIntoView({behavior:'smooth'})">
+    <div class="step" style="cursor:pointer;" onclick="window.open('https://wa.me/6183012070?text=%C2%A1Hola!%20Ya%20envi%C3%A9%20los%20datos%20del%20formulario.','_blank')">
       <div class="step-icon">
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
           <rect x="3" y="6" width="22" height="16" rx="2" stroke="#c9a84c" stroke-width="1.5"/>
@@ -578,41 +587,65 @@
         </svg>
       </div>
       <p class="step-num">Paso 02</p>
-      <p class="step-name">Realiza tu Pago</p>
-      <p class="step-desc">Transfiere el pago completo o anticipo según tu tipo de invitación.</p>
+      <p class="step-name">Recibe tu Diseño</p>
+      <p class="step-desc">Preparamos tu invitación personalizada y te enviamos una vista previa para revisión por WhatsApp.</p>
+      <p class="step-desc">Da clic aquí para ir al WhatsApp</p>
+
     </div>
 
-    <!-- Paso 3 -->
-    <div class="step" style="cursor:pointer;" onclick="window.open('https://wa.me/6183012070?text=Hola%2C%20me%20interesan%20las%20invitaciones%20de%3A%20_____________','_blank')">
-      <div class="step-icon">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-          <path d="M5 4 C3 4 2 5 2 7 L2 19 C2 21 3 22 5 22 L10 22 L14 26 L18 22 L23 22 C25 22 26 21 26 19 L26 7 C26 5 25 4 23 4 Z" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
-          <circle cx="9" cy="13" r="1.5" stroke="#c9a84c" stroke-width="1"/>
-          <circle cx="14" cy="13" r="1.5" stroke="#c9a84c" stroke-width="1"/>
-          <circle cx="19" cy="13" r="1.5" stroke="#c9a84c" stroke-width="1"/>
-        </svg>
-      </div>
-      <p class="step-num">Paso 03</p>
-      <p class="step-name">WhatsApp</p>
-      <p class="step-desc">Envíanos la captura de tu pago por WhatsApp y cualquier duda que tengas.</p>
-    </div>
+<!-- Paso 3 -->
+<div class="step" style="cursor:pointer;" onclick="document.getElementById('precios').scrollIntoView({behavior:'smooth'})">
+  <div class="step-icon">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M5 4 C3 4 2 5 2 7 L2 19 C2 21 3 22 5 22 L10 22 L14 26 L18 22 L23 22 C25 22 26 21 26 19 L26 7 C26 5 25 4 23 4 Z" stroke="#c9a84c" stroke-width="1.5" fill="none"/>
+      <circle cx="9" cy="13" r="1.5" stroke="#c9a84c" stroke-width="1"/>
+      <circle cx="14" cy="13" r="1.5" stroke="#c9a84c" stroke-width="1"/>
+      <circle cx="19" cy="13" r="1.5" stroke="#c9a84c" stroke-width="1"/>
+    </svg>
   </div>
 
-  <p class="delivery-note">✦ Entregamos tu diseño en 1–2 días hábiles ✦</p>
+  <p class="step-num">Paso 03</p>
+  <p class="step-name">Aprueba y Paga</p>
+  <p class="step-desc">
+    Cuando estés completamente satisfecha con el resultado, realiza el pago y tu invitación estará lista para compartir.
+  </p>
+   <p class="step-desc">Da clic aquí para ver los datos bancarios</p>
 
-  <p class="section-label" id="precios" style="margin-bottom:24px;">Precios</p>
-  <div class="prices-grid">
-    <div class="price-card featured">
-      <p class="price-type">Bodas &amp; XV Años</p>
-      <div class="price-amount"><sup>$</sup>300</div>
-      <p class="price-detail">Opción de anticipo:<br><strong>$150</strong> al ordenar + <strong>$150</strong> al entregar.</p>
-    </div>
-    <div class="price-card">
-      <p class="price-type">Bautizos &amp; Cumpleaños</p>
-      <div class="price-amount"><sup>$</sup>150</div>
-      <p class="price-detail">Pago completo antes de iniciar el diseño.</p>
-    </div>
+
+</div>
+
+</div>
+
+<p class="delivery-note" style="color:#8b6b4a; font-style:italic; font-size:1.1rem;">
+  ✦ Entregamos tu diseño en 1–2 días hábiles ✦
+</p>
+
+<p class="section-label" id="precios"
+style="margin-bottom:24px; color:#a67c52;">
+  Pago contraentrega
+</p>
+
+<p class="section-label" id="servicios"
+style="margin-bottom:24px;
+text-transform:none;
+font-style:italic;
+font-size:0.9rem;
+letter-spacing:0.08em;
+color:#8b6b4a;">
+  ✦ No pagas hasta que estés satisfecha con el resultado ✦
+</p>
+
+<div class="prices-grid">
+  <div class="price-card featured">
+    <p class="price-type">Bodas &amp; XV Años</p>
+    <div class="price-amount"><sup>$</sup>300</div>
   </div>
+
+  <div class="price-card">
+    <p class="price-type">Bautizos &amp; Cumpleaños</p>
+    <div class="price-amount"><sup>$</sup>150</div>
+  </div>
+</div>
 
   <!-- Datos bancarios -->
   <div style="max-width:600px;margin:28px auto 0;">
@@ -628,18 +661,20 @@
         </div>
         <div>
           <p class="price-type" style="margin-bottom:2px;">Datos para Transferencia</p>
-          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--dark);">Nu México · SPEI</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;font-weight:700;color:var(--dark);">
+  Nu México · SPEI
+</p>
         </div>
       </div>
 
       <div style="display:flex;flex-direction:column;gap:12px;">
         <div style="background:var(--gold-pale);border-radius:3px;padding:12px 16px;cursor:pointer;position:relative;" onclick="copyToClipboard('Dellaneira Alvarado Hidalgo', this)" title="Clic para copiar">
-          <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Beneficiario <span style="font-size:0.6rem;opacity:0.7;">· clic para copiar</span></p>
+          <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Beneficiario <span style="font-size:0.6rem;opacity:0.7;font-weight:700;">· clic para copiar</span></p>
           <p style="font-size:0.95rem;color:var(--dark);font-weight:400;">Dellaneira Alvarado Hidalgo</p>
           <span class="copy-toast">¡Copiado!</span>
         </div>
         <div style="background:var(--gold-pale);border-radius:3px;padding:12px 16px;cursor:pointer;position:relative;" onclick="copyToClipboard('638180000182526477', this)" title="Clic para copiar">
-          <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">CLABE Interbancaria <span style="font-size:0.6rem;opacity:0.7;">· clic para copiar</span></p>
+          <p style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">CLABE Interbancaria <span style="font-size:0.6rem;opacity:0.7;font-weight:700;">· clic para copiar</span></p>
           <p style="font-size:1rem;color:var(--dark);font-weight:400;letter-spacing:0.06em;font-family:'Lato',sans-serif;">638180000182526477</p>
           <span class="copy-toast">¡Copiado!</span>
         </div>
